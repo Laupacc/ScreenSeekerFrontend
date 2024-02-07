@@ -37,7 +37,7 @@ function Home() {
   const [moviesData, SetMoviesData] = useState([]);
 
   useEffect(() => {
-    fetch('http://localhost:3000/movies')
+    fetch('https://my-movies-backend-iota.vercel.app/movies')
       .then(response => response.json())
       .then(data => {
         console.log(data);

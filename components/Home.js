@@ -80,7 +80,7 @@ function Home() {
       </div>
       <div className={styles.title}>LAST RELEASES</div>
       <div className={styles.moviesContainer}>
-        {movies}
+        {movies} {tv}
       </div>
     </div>
   );

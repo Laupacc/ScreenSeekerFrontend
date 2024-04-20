@@ -45,10 +45,26 @@ function Home() {
       });
   }, []);
 
+  // Tv shows list
+  const [tvData, setTvData] = useState([]);
+
+  useEffect(() => {
+    fetch('https://my-movies-backend-iota.vercel.app/tv')
+      .then(response => response.json())
+      .then(data => {
+        console.log(data);
+        setTvData(data.tv);
+      });
+  }, []);
+
 
   const movies = moviesData.map((data, i) => {
     const isLiked = likedMovies.some(movie => movie === data.title);
     return <Movie key={i} updateLikedMovies={updateLikedMovies} isLiked={isLiked} title={data.title} overview={data.overview} poster={data.poster_path} voteAverage={data.vote_average} voteCount={data.vote_count} />;
+  });
+
+  const tv = tvData.map((data, i) => {
+    return <Movie key={i} title={data.title} overview={data.overview} poster={data.poster_path} voteAverage={data.vote_average} voteCount={data.vote_count} />;
   });
 
   return (

@@ -57,6 +57,21 @@ function Home() {
       });
   }, []);
 
+  // Genres list
+  const [genres, setGenres] = useState([]);
+
+  useEffect(() => {
+    fetch('https://my-movies-backend-iota.vercel.app/genres')
+      .then(response => response.json())
+      .then(data => {
+        console.log(data);
+        setGenres(data.genres);
+      });
+  }, []);
+
+  const genresList = genres.map((data, i) => {
+    return <div key={i}>{data.name}</div>;
+  });
 
   const movies = moviesData.map((data, i) => {
     const isLiked = likedMovies.some(movie => movie === data.title);
@@ -64,25 +79,39 @@ function Home() {
   });
 
   const tv = tvData.map((data, i) => {
-    return <Movie key={i} title={data.title} overview={data.overview} poster={data.poster_path} voteAverage={data.vote_average} voteCount={data.vote_count} />;
+    return <Movie key={i} title={data.name} overview={data.overview} poster={data.poster_path} voteAverage={data.vote_average} voteCount={data.vote_count} />;
   });
 
+  const [selectedCategory, setSelectedCategory] = useState("MOVIES");
+
   return (
-    <div className={styles.main}>
-      <div className={styles.header}>
-        <div className={styles.logocontainer}>
-          <img src="logo.png" alt="Logo" />
-          <img className={styles.logo} src="logoletter.png" alt="Letter logo" />
+    <>
+      <div className={styles.main}>
+        <div className={styles.header}>
+          <Button className={styles.button} onClick={() => setSelectedCategory("MOVIES")}>Movies</Button>
+          <Button className={styles.button} onClick={() => setSelectedCategory("TV")}>Tv</Button>
+          <Popover title="Liked movies" content={popoverContent} className={styles.popover} trigger="click">
+            <Button>♥ {likedMovies.length} movie(s)</Button>
+          </Popover>
         </div>
-        <Popover title="Liked movies" content={popoverContent} className={styles.popover} trigger="click">
-          <Button>♥ {likedMovies.length} movie(s)</Button>
-        </Popover>
+        {selectedCategory === "MOVIES" && (
+          <>
+            <div className={styles.title}>LAST RELEASES</div>
+            <div className={styles.moviesContainer}>
+              {movies}
+            </div>
+          </>
+        )}
+        {selectedCategory === "TV" && (
+          <>
+            <div className={styles.title}>TV SHOWS</div>
+            <div className={styles.moviesContainer}>
+              {tv}
+            </div>
+          </>
+        )}
       </div>
-      <div className={styles.title}>LAST RELEASES</div>
-      <div className={styles.moviesContainer}>
-        {movies} {tv}
-      </div>
-    </div>
+    </>
   );
 }
 

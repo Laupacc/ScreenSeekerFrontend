@@ -7,6 +7,7 @@ import 'antd/dist/antd.css';
 import styles from '../styles/Home.module.css';
 
 function Home() {
+  const [selectedCategory, setSelectedCategory] = useState("MOVIES");
   const [likedMovies, setLikedMovies] = useState([]);
 
   // Liked movies (inverse data flow)
@@ -58,18 +59,18 @@ function Home() {
   }, []);
 
   // Genres list
-  const [genres, setGenres] = useState([]);
+  const [genresData, setGenresData] = useState([]);
 
   useEffect(() => {
     fetch('https://my-movies-backend-iota.vercel.app/genres')
       .then(response => response.json())
       .then(data => {
         console.log(data);
-        setGenres(data.genres);
+        setGenresData(data.genres);
       });
   }, []);
 
-  const genresList = genres.map((data, i) => {
+  const genrePopover = genresData.map((data, i) => {
     return <div key={i}>{data.name}</div>;
   });
 
@@ -82,7 +83,6 @@ function Home() {
     return <Movie key={i} title={data.name} overview={data.overview} poster={data.poster_path} voteAverage={data.vote_average} voteCount={data.vote_count} />;
   });
 
-  const [selectedCategory, setSelectedCategory] = useState("MOVIES");
 
   return (
     <>
@@ -96,7 +96,12 @@ function Home() {
         </div>
         {selectedCategory === "MOVIES" && (
           <>
-            <div className={styles.title}>LAST RELEASES</div>
+            <div className={styles.movieHeader}>
+              <div className={styles.title}>LAST RELEASES</div>
+              <Popover title="genres" content={genrePopover} className={styles.popover} trigger="click">
+                <Button className={styles.button}>Genres</Button>
+              </Popover>
+            </div>
             <div className={styles.moviesContainer}>
               {movies}
             </div>

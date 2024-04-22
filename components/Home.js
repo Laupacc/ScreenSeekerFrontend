@@ -11,12 +11,15 @@ import styles from '../styles/Home.module.css';
 function Home() {
   const [selectedCategory, setSelectedCategory] = useState("MOVIES");
   const [selectedTab, setSelectedTab] = useState("LASTRELEASES");
+  const [selectedTabShow, setSelectedTabShow] = useState("LASTRELEASESSHOWS");
   const [likedMovies, setLikedMovies] = useState([]);
   const [moviesData, setMoviesData] = useState([]);
   const [tvData, setTvData] = useState([]);
   const [genresData, setGenresData] = useState([]);
-  const [activeGenre, setActiveGenre] = useState(null);
   const [topRatedMovies, setTopRatedMovies] = useState([]);
+  const [selectedGenres, setSelectedGenres] = useState([]);
+  const [topRatedTvShows, setTopRatedTvShows] = useState([]);
+
 
   // fetch movies list
   useEffect(() => {
@@ -58,6 +61,17 @@ function Home() {
       });
   }, []);
 
+  // fetch top rated tv shows list
+  useEffect(() => {
+    fetch('https://my-movies-backend-iota.vercel.app/topratedtv')
+      .then(response => response.json())
+      .then(data => {
+        console.log(data);
+        setTopRatedTvShows(data.topratedtv);
+      });
+  }, []);
+
+
   // Liked movies (inverse data flow)
   const updateLikedMovies = (movieTitle) => {
     if (likedMovies.find(movie => movie === movieTitle)) {
@@ -84,44 +98,63 @@ function Home() {
     </div>
   );
 
-
-  // Filter movies by genre
-  const genreSelected = (genreId) => {
-    console.log('Selected genre:', genreId);
-    if (activeGenre === genreId) {
-      setActiveGenre(null);
-      setMoviesData([]);
+  // Function to toggle selected genres
+  const toggleGenre = (genreId) => {
+    console.log(genreId);
+    if (selectedGenres.includes(genreId)) {
+      setSelectedGenres(selectedGenres.filter(id => id !== genreId));
     } else {
-      setActiveGenre(genreId);
-      const genreMovies = moviesData.filter(movie => movie.genre_ids.includes(genreId));
-      setMoviesData(genreMovies);
+      setSelectedGenres([...selectedGenres, genreId]);
     }
   };
 
+  // Function to filter movies based on selected genres
+  const filterMoviesByGenres = (movies) => {
+    if (selectedGenres.length === 0) return movies;
+    return movies.filter(movie =>
+      movie.genre_ids.some(genreId => selectedGenres.includes(genreId))
+    );
+  };
+
   // Movies list map
-  const movies = moviesData.map((data, i) => {
+  const filteredMovies = filterMoviesByGenres(moviesData);
+  const movies = filteredMovies.map((data, i) => {
     const isLiked = likedMovies.some(movie => movie === data.title);
     return <Movie key={i} updateLikedMovies={updateLikedMovies} isLiked={isLiked} title={data.title} overview={data.overview} poster={data.poster_path} voteAverage={data.vote_average} voteCount={data.vote_count} genre_ids={data.genre_ids} genresData={genresData} />;
   });
 
-  // Tv shows list map
-  const tv = tvData.map((data, i) => {
-    return <Movie key={i} title={data.name} overview={data.overview} poster={data.poster_path} voteAverage={data.vote_average} voteCount={data.vote_count} genre_ids={data.genre_ids} genresData={genresData} />;
-  });
-
-  // Genres map
-  const genrePopover = genresData.map((data, i) => {
-    const isActive = activeGenre === data.id;
-    return (
-      <div key={i} className={`${styles.genreContent} ${isActive ? styles.activeGenre : ''}`} onClick={() => genreSelected(data.id)}>
-        {data.name}
-      </div>
+  // Function to filter TV shows based on selected genres
+  const filterTvShowsByGenres = (tvShows) => {
+    if (selectedGenres.length === 0) return tvShows;
+    return tvShows.filter(show =>
+      show.genre_ids.some(genreId => selectedGenres.includes(genreId))
     );
+  };
+
+  // TV shows list map
+  const filteredTvShows = filterTvShowsByGenres(tvData);
+  const tv = filteredTvShows.map((data, i) => {
+    return <Movie key={i} title={data.name} overview={data.overview} poster={data.poster_path} voteAverage={data.vote_average} voteCount={data.vote_count} genre_ids={data.genre_ids} genresData={genresData} />;
   });
 
   // Top rated movies list map
   const topRated = topRatedMovies.map((data, i) => {
     return <Movie key={i} title={data.title} overview={data.overview} poster={data.poster_path} voteAverage={data.vote_average} voteCount={data.vote_count} genre_ids={data.genre_ids} genresData={genresData} />;
+  });
+
+  // Top rated tv shows list map
+  const topRatedTv = topRatedTvShows.map((data, i) => {
+    return <Movie key={i} title={data.name} overview={data.overview} poster={data.poster_path} voteAverage={data.vote_average} voteCount={data.vote_count} genre_ids={data.genre_ids} genresData={genresData} />;
+  });
+
+  // Genres map
+  const genrePopover = genresData.map((data, i) => {
+    const isSelected = selectedGenres.includes(data.id);
+    return (
+      <div key={i} className={`${styles.genreContent} ${isSelected ? styles.selectedGenre : ''}`} onClick={() => toggleGenre(data.id)}>
+        {data.name}
+      </div>
+    );
   });
 
   return (
@@ -160,10 +193,23 @@ function Home() {
         )}
         {selectedCategory === "TV" && (
           <>
-            <div className={styles.title}>TV SHOWS</div>
-            <div className={styles.moviesContainer}>
-              {tv}
+            <div className={styles.movieHeader}>
+              <Button className={styles.button} onClick={() => setSelectedTabShow("LASTRELEASESSHOWS")}>Last Releases Shows</Button>
+              <Button className={styles.button} onClick={() => setSelectedTabShow("TOPRATEDSHOWS")}>Top Rated Shows</Button>
+              <Popover content={genrePopover} className={styles.popover} trigger="click">
+                <Button className={styles.button}>Genres</Button>
+              </Popover>
             </div>
+            {selectedTabShow === "LASTRELEASESSHOWS" && (
+              <div className={styles.moviesContainer}>
+                {tvData.length > 0 ? tv : <p>Loading...</p>}
+              </div>
+            )}
+            {selectedTabShow === "TOPRATEDSHOWS" && (
+              <div className={styles.moviesContainer}>
+                {topRatedTvShows.length > 0 ? topRatedTv : <p>Loading...</p>}
+              </div>
+            )}
           </>
         )}
       </div>

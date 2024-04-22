@@ -92,9 +92,11 @@
   background-color: #f2a643;
   color: white;
   border: none;
+  border-radius: 4px;
 }
-.genreContent:active {
-  background-color: #f2a643;
+.selectedGenre {
+  background-color: red;
   color: white;
   border: none;
+  border-radius: 4px;
 }

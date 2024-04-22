@@ -2,10 +2,10 @@ import { useState, useEffect } from 'react';
 import { Popover, Button } from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleXmark } from '@fortawesome/free-solid-svg-icons';
+import { Link } from 'react-router-dom';
 import Movie from './Movie';
 import 'antd/dist/antd.css';
 import styles from '../styles/Home.module.css';
-
 
 
 function Home() {
@@ -13,61 +13,34 @@ function Home() {
   const [selectedTab, setSelectedTab] = useState("LASTRELEASES");
   const [selectedTabShow, setSelectedTabShow] = useState("LASTRELEASESSHOWS");
   const [likedMovies, setLikedMovies] = useState([]);
+  const [selectedGenres, setSelectedGenres] = useState([]);
   const [moviesData, setMoviesData] = useState([]);
   const [tvData, setTvData] = useState([]);
   const [genresData, setGenresData] = useState([]);
   const [topRatedMovies, setTopRatedMovies] = useState([]);
-  const [selectedGenres, setSelectedGenres] = useState([]);
   const [topRatedTvShows, setTopRatedTvShows] = useState([]);
 
 
-  // fetch movies list
   useEffect(() => {
-    fetch('https://my-movies-backend-iota.vercel.app/movies')
-      .then(response => response.json())
+    Promise.all([
+      fetch('https://my-movies-backend-iota.vercel.app/movies'),
+      fetch('https://my-movies-backend-iota.vercel.app/tv'),
+      fetch('https://my-movies-backend-iota.vercel.app/genres'),
+      fetch('https://my-movies-backend-iota.vercel.app/topratedmovies'),
+      fetch('https://my-movies-backend-iota.vercel.app/topratedtv')
+    ])
+      .then(responses => Promise.all(responses.map(response => response.json())))
       .then(data => {
         console.log(data);
-        setMoviesData(data.movies);
-      });
-  }, []);
-
-  // fetch tv shows list
-  useEffect(() => {
-    fetch('https://my-movies-backend-iota.vercel.app/tv')
-      .then(response => response.json())
-      .then(data => {
-        console.log(data);
-        setTvData(data.tv);
-      });
-  }, []);
-
-  // fetch genres list
-  useEffect(() => {
-    fetch('https://my-movies-backend-iota.vercel.app/genres')
-      .then(response => response.json())
-      .then(data => {
-        console.log(data);
-        setGenresData(data.genres);
-      });
-  }, []);
-
-  // fetch top rated movies list
-  useEffect(() => {
-    fetch('https://my-movies-backend-iota.vercel.app/topratedmovies')
-      .then(response => response.json())
-      .then(data => {
-        console.log(data);
-        setTopRatedMovies(data.topratedmovies);
-      });
-  }, []);
-
-  // fetch top rated tv shows list
-  useEffect(() => {
-    fetch('https://my-movies-backend-iota.vercel.app/topratedtv')
-      .then(response => response.json())
-      .then(data => {
-        console.log(data);
-        setTopRatedTvShows(data.topratedtv);
+        const [moviesData, tvData, genresData, topRatedMoviesData, topRatedTvData] = data;
+        setMoviesData(moviesData.movies);
+        setTvData(tvData.tv);
+        setGenresData(genresData.genres);
+        setTopRatedMovies(topRatedMoviesData.topratedmovies);
+        setTopRatedTvShows(topRatedTvData.topratedtv);
+      })
+      .catch(error => {
+        console.error('Error fetching data:', error);
       });
   }, []);
 
@@ -108,44 +81,43 @@ function Home() {
     }
   };
 
-  // Function to filter movies based on selected genres
-  const filterMoviesByGenres = (movies) => {
-    if (selectedGenres.length === 0) return movies;
-    return movies.filter(movie =>
-      movie.genre_ids.some(genreId => selectedGenres.includes(genreId))
+  // Generic function to filter items based on selected genres
+  const filterItemsByGenres = (items, selectedGenres) => {
+    if (selectedGenres.length === 0) return items;
+    return items.filter(item =>
+      item.genre_ids.some(genreId => selectedGenres.includes(genreId))
     );
   };
 
-  // Movies list map
-  const filteredMovies = filterMoviesByGenres(moviesData);
-  const movies = filteredMovies.map((data, i) => {
-    const isLiked = likedMovies.some(movie => movie === data.title);
-    return <Movie key={i} updateLikedMovies={updateLikedMovies} isLiked={isLiked} title={data.title} overview={data.overview} poster={data.poster_path} voteAverage={data.vote_average} voteCount={data.vote_count} genre_ids={data.genre_ids} genresData={genresData} />;
-  });
-
-  // Function to filter TV shows based on selected genres
-  const filterTvShowsByGenres = (tvShows) => {
-    if (selectedGenres.length === 0) return tvShows;
-    return tvShows.filter(show =>
-      show.genre_ids.some(genreId => selectedGenres.includes(genreId))
-    );
+  // Function to map filtered items to components
+  const mapFilteredItemsToComponents = (filteredItems, Component) => {
+    return filteredItems.map((data, i) => (
+      <Component
+        key={i}
+        title={data.title || data.name}
+        overview={data.overview}
+        poster={data.poster_path}
+        voteAverage={data.vote_average}
+        voteCount={data.vote_count}
+        genre_ids={data.genre_ids}
+        releaseDate={data.release_date}
+        genresData={genresData}
+      />
+    ));
   };
 
-  // TV shows list map
-  const filteredTvShows = filterTvShowsByGenres(tvData);
-  const tv = filteredTvShows.map((data, i) => {
-    return <Movie key={i} title={data.name} overview={data.overview} poster={data.poster_path} voteAverage={data.vote_average} voteCount={data.vote_count} genre_ids={data.genre_ids} genresData={genresData} />;
-  });
+  // Filter movies, TV shows, top rated movies, and top rated TV shows
+  const filteredMovies = filterItemsByGenres(moviesData, selectedGenres);
+  const movies = mapFilteredItemsToComponents(filteredMovies, Movie);
 
-  // Top rated movies list map
-  const topRated = topRatedMovies.map((data, i) => {
-    return <Movie key={i} title={data.title} overview={data.overview} poster={data.poster_path} voteAverage={data.vote_average} voteCount={data.vote_count} genre_ids={data.genre_ids} genresData={genresData} />;
-  });
+  const filteredTvShows = filterItemsByGenres(tvData, selectedGenres);
+  const tv = mapFilteredItemsToComponents(filteredTvShows, Movie);
 
-  // Top rated tv shows list map
-  const topRatedTv = topRatedTvShows.map((data, i) => {
-    return <Movie key={i} title={data.name} overview={data.overview} poster={data.poster_path} voteAverage={data.vote_average} voteCount={data.vote_count} genre_ids={data.genre_ids} genresData={genresData} />;
-  });
+  const filteredTopRatedMovies = filterItemsByGenres(topRatedMovies, selectedGenres);
+  const topRated = mapFilteredItemsToComponents(filteredTopRatedMovies, Movie);
+
+  const filteredTopRatedTvShows = filterItemsByGenres(topRatedTvShows, selectedGenres);
+  const topRatedTv = mapFilteredItemsToComponents(filteredTopRatedTvShows, Movie);
 
   // Genres map
   const genrePopover = genresData.map((data, i) => {
@@ -161,11 +133,13 @@ function Home() {
     <>
       <div className={styles.main}>
         <div className={styles.mainHeader}>
-          <img src='ScreenSeekerLogoSmall.png' alt="logo" className={styles.logo} />
+          <div className={styles.topButtonsHeader}>
+            <a className={styles.buttonIconCinema} onClick={() => setSelectedCategory("MOVIES")}><img src='cinemaIcon.png' alt="icon" className={styles.icon} /></a>
+            <a className={styles.buttonIconTv} onClick={() => setSelectedCategory("TV")}><img src='tvIcon.png' alt="icon" className={styles.icon} /></a>
+          </div>
+          <img src='ScreenSeekerRoundLogoSmall.png' alt="logo" className={styles.logo} />
         </div>
-        <div className={styles.categories}>
-          <Button className={styles.button} onClick={() => setSelectedCategory("MOVIES")}>Movies</Button>
-          <Button className={styles.button} onClick={() => setSelectedCategory("TV")}>Tv</Button>
+        <div>
           <Popover title="Liked movies" content={popoverContent} className={styles.popover} trigger="click">
             <Button>♥ {likedMovies.length} movie(s)</Button>
           </Popover>
@@ -173,10 +147,12 @@ function Home() {
         {selectedCategory === "MOVIES" && (
           <>
             <div className={styles.movieHeader}>
-              <Button className={styles.button} onClick={() => setSelectedTab("LASTRELEASES")}>Last Releases</Button>
-              <Button className={styles.button} onClick={() => setSelectedTab("TOPRATED")}>Top Rated Movies</Button>
+              <div className={styles.buttonHeader}>
+                <Button className={styles.button} onClick={() => setSelectedTab("LASTRELEASES")}>Last Releases</Button>
+                <Button className={styles.button} onClick={() => setSelectedTab("TOPRATED")}>Top Rated Movies</Button>
+              </div>
               <Popover content={genrePopover} className={styles.popover} trigger="click">
-                <Button className={styles.button}>Genres</Button>
+                <Button className={styles.genres}>Genres</Button>
               </Popover>
             </div>
             {selectedTab === "LASTRELEASES" && (
@@ -194,10 +170,12 @@ function Home() {
         {selectedCategory === "TV" && (
           <>
             <div className={styles.movieHeader}>
-              <Button className={styles.button} onClick={() => setSelectedTabShow("LASTRELEASESSHOWS")}>Last Releases Shows</Button>
-              <Button className={styles.button} onClick={() => setSelectedTabShow("TOPRATEDSHOWS")}>Top Rated Shows</Button>
+              <div className={styles.buttonHeader}>
+                <Button className={styles.button} onClick={() => setSelectedTabShow("LASTRELEASESSHOWS")}>Last Releases Shows</Button>
+                <Button className={styles.button} onClick={() => setSelectedTabShow("TOPRATEDSHOWS")}>Top Rated Shows</Button>
+              </div>
               <Popover content={genrePopover} className={styles.popover} trigger="click">
-                <Button className={styles.button}>Genres</Button>
+                <Button className={styles.genres}>Genres</Button>
               </Popover>
             </div>
             {selectedTabShow === "LASTRELEASESSHOWS" && (

@@ -67,10 +67,10 @@ function Movie(props) {
           <p className={styles.genres}>{mapGenreIdsToNames()}</p>
         </div>
         <div className={styles.iconContainer}>
-          <span className={styles.vote}>{stars} ({props.voteCount})</span>
-          <span>{personalStars} ({personalNote})</span>
-          <span><FontAwesomeIcon icon={faVideo} onClick={() => handleWatchMovie()} style={videoIconStyle} className="watch" /> ({watchCount})</span>
-          <span><FontAwesomeIcon icon={faHeart} onClick={() => handleLikeMovie()} style={heartIconStyle} className="like" /></span>
+          <span className={styles.vote}>Ratings: {stars}({props.voteCount})</span>
+          <span>My note: {personalStars} ({personalNote})</span>
+          <span>Watch count: <FontAwesomeIcon icon={faVideo} onClick={() => handleWatchMovie()} style={videoIconStyle} className="watch" />({watchCount}) </span>
+          <span>I love it: <FontAwesomeIcon icon={faHeart} onClick={() => handleLikeMovie()} style={heartIconStyle} className="like" /></span>
         </div>
       </div>
     </div>

@@ -45,6 +45,17 @@ function Movie(props) {
     personalStars.push(<FontAwesomeIcon key={i} icon={faStar} onClick={() => setPersonalNote(i + 1)} style={style} className="note" />);
   }
 
+  // Map genre IDs to names
+  const mapGenreIdsToNames = () => {
+    if (!props.genresData) {
+      return '';
+    }
+    const genreNames = props.genresData
+      .filter(genre => props.genre_ids.includes(genre.id))
+      .map(genre => genre.name);
+    return genreNames.join(', ');
+  };
+
   return (
     <div className={styles.card}>
       <img className={styles.image} src={`https://image.tmdb.org/t/p/w500/${props.poster}`} alt={props.title} />
@@ -52,6 +63,8 @@ function Movie(props) {
         <div>
           <span className={styles.name}>{props.title}</span>
           <p className={styles.description}>{props.overview.length > 205 ? `${props.overview.slice(0, 250)}...` : props.overview}</p>
+          <p className={styles.releaseDate}>{props.releaseDate}</p>
+          <p className={styles.genres}>{mapGenreIdsToNames()}</p>
         </div>
         <div className={styles.iconContainer}>
           <span className={styles.vote}>{stars} ({props.voteCount})</span>

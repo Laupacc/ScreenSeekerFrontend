@@ -4,32 +4,36 @@
   margin: 0;
 }
 
-.header {
+.mainHeader {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: space-evenly;
   width: 100vw;
-  height: 60px;
   background-color: #021334;
   color: white;
   padding: 0px 20px 0px 20px;
+}
+
+.categories {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  height: 80px;
+  background-color: #203c68;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 20px 0px 20px 20px;
+  border-radius: 20px;
 }
 
 .title {
   max-width: 100vw;
   margin: 40px 0px 0px 60px;
   font-weight: 600;
-}
-
-.logocontainer {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.logo {
-  margin-left: 20px;
-  width: 150px;
 }
 
 .moviesContainer {
@@ -39,21 +43,6 @@
   max-width: 100vw;
   margin: 20px;
 }
-
-.popover {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 30px;
-  width: 100px;
-  background-color: transparent;
-  color: white;
-  border: 1px white solid;
-  border-radius: 4px;
-  transition-duration: 0.5s;
-  cursor: pointer;
-}
-
 .popover:hover {
   background-color: white;
   color: #f2a643;
@@ -70,9 +59,9 @@
   justify-content: space-between;
   align-items: center;
 }
-
 .crossIcon {
   cursor: pointer;
+  margin: 0px 10px 0px 20px;
 }
 .button {
   display: flex;
@@ -89,6 +78,23 @@
 }
 .movieHeader {
   display: flex;
-  justify-content: space-between;
+  justify-content: space-evenly;
   align-items: center;
+}
+.genreContent {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 5px 10px 5px 10px;
+  cursor: pointer;
+}
+.genreContent:hover {
+  background-color: #f2a643;
+  color: white;
+  border: none;
+}
+.genreContent:active {
+  background-color: #f2a643;
+  color: white;
+  border: none;
 }

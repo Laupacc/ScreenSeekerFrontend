@@ -6,6 +6,9 @@ import { Link } from 'react-router-dom';
 import Movie from './Movie';
 import 'antd/dist/antd.css';
 import styles from '../styles/Home.module.css';
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
+import Modal from '@mui/material/Modal';
 
 
 function Home() {
@@ -19,6 +22,23 @@ function Home() {
   const [genresData, setGenresData] = useState([]);
   const [topRatedMovies, setTopRatedMovies] = useState([]);
   const [topRatedTvShows, setTopRatedTvShows] = useState([]);
+  const [open, setOpen] = useState(false);
+
+
+  const modalstyle = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 400,
+    bgcolor: 'background.paper',
+    border: '2px solid #000',
+    boxShadow: 24,
+    p: 4,
+  };
+
+
+
 
 
   useEffect(() => {
@@ -129,6 +149,14 @@ function Home() {
     );
   });
 
+  // Genres button content
+  const selectedGenresCount = selectedGenres.length;
+  const genresButtonContent = selectedGenresCount > 0 ? `Genres (${selectedGenresCount} selected)` : 'Genres';
+
+  // Login modal
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+
   return (
     <>
       <div className={styles.main}>
@@ -137,22 +165,43 @@ function Home() {
             <a className={styles.buttonIconCinema} onClick={() => setSelectedCategory("MOVIES")}><img src='cinemaIcon.png' alt="icon" className={styles.icon} /></a>
             <a className={styles.buttonIconTv} onClick={() => setSelectedCategory("TV")}><img src='tvIcon.png' alt="icon" className={styles.icon} /></a>
           </div>
-          <img src='ScreenSeekerRoundLogoSmall.png' alt="logo" className={styles.logo} />
+          <div className={styles.loginHeader}>
+            <a className={styles.login} onClick={handleOpen}>Login</a>
+            <Modal
+              open={open}
+              onClose={handleClose}
+              aria-labelledby="modal-modal-title"
+              aria-describedby="modal-modal-description"
+            >
+              <Box sx={modalstyle}>
+                <Typography id="modal-modal-title" variant="h6" component="h2">
+                  Sing in
+                </Typography>
+                <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+                  Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
+                </Typography>
+                <Button>Submit</Button>
+                <a onClick={handleClose}>Close</a>
+              </Box>
+            </Modal>
+
+            <img src='ScreenSeekerRoundLogoSmall.png' alt="logo" className={styles.logo} />
+          </div>
         </div>
-        <div>
+        {/* <div>
           <Popover title="Liked movies" content={popoverContent} className={styles.popover} trigger="click">
             <Button>♥ {likedMovies.length} movie(s)</Button>
           </Popover>
-        </div>
+        </div> */}
         {selectedCategory === "MOVIES" && (
           <>
             <div className={styles.movieHeader}>
               <div className={styles.buttonHeader}>
-                <Button className={styles.button} onClick={() => setSelectedTab("LASTRELEASES")}>Last Releases</Button>
-                <Button className={styles.button} onClick={() => setSelectedTab("TOPRATED")}>Top Rated Movies</Button>
+                <a className={styles.button} onClick={() => setSelectedTab("LASTRELEASES")}>New Movies</a>
+                <a className={styles.button} onClick={() => setSelectedTab("TOPRATED")}>Best Movies</a>
               </div>
               <Popover content={genrePopover} className={styles.popover} trigger="click">
-                <Button className={styles.genres}>Genres</Button>
+                <a className={styles.genres}>{genresButtonContent}</a>
               </Popover>
             </div>
             {selectedTab === "LASTRELEASES" && (
@@ -171,11 +220,11 @@ function Home() {
           <>
             <div className={styles.movieHeader}>
               <div className={styles.buttonHeader}>
-                <Button className={styles.button} onClick={() => setSelectedTabShow("LASTRELEASESSHOWS")}>Last Releases Shows</Button>
-                <Button className={styles.button} onClick={() => setSelectedTabShow("TOPRATEDSHOWS")}>Top Rated Shows</Button>
+                <a className={styles.button} onClick={() => setSelectedTabShow("LASTRELEASESSHOWS")}>New Shows</a>
+                <a className={styles.button} onClick={() => setSelectedTabShow("TOPRATEDSHOWS")}>Best Shows</a>
               </div>
               <Popover content={genrePopover} className={styles.popover} trigger="click">
-                <Button className={styles.genres}>Genres</Button>
+                <a className={styles.genres}>{genresButtonContent}</a>
               </Popover>
             </div>
             {selectedTabShow === "LASTRELEASESSHOWS" && (
@@ -191,6 +240,7 @@ function Home() {
           </>
         )}
       </div>
+
     </>
   );
 }

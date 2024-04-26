@@ -37,10 +37,6 @@ function Home() {
     p: 4,
   };
 
-
-
-
-
   useEffect(() => {
     Promise.all([
       fetch('https://my-movies-backend-iota.vercel.app/movies'),
@@ -157,36 +153,92 @@ function Home() {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
+  // Fetch sign up and sign in data
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [token, setToken] = useState('');
+
+  const handleSignUp = () => {
+    fetch('https://my-movies-backend-iota.vercel.app/signup', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ username, password }),
+    })
+      .then(response => response.json())
+      .then(data => {
+        console.log('Success:', data);
+        setToken(data.token);
+        setOpen(false);
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+      });
+  }
+
+  const handleSignIn = () => {
+    fetch('https://my-movies-backend-iota.vercel.app/signin', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ username, password }),
+    })
+      .then(response => response.json())
+      .then(data => {
+        console.log('Success:', data);
+        setToken(data.token);
+        setOpen(false);
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+      });
+  }
+
+  const handleSignOut = () => {
+    setToken('');
+  }
+
   return (
     <>
       <div className={styles.main}>
-        <div className={styles.mainHeader}>
-          <div className={styles.topButtonsHeader}>
-            <a className={styles.buttonIconCinema} onClick={() => setSelectedCategory("MOVIES")}><img src='cinemaIcon.png' alt="icon" className={styles.icon} /></a>
-            <a className={styles.buttonIconTv} onClick={() => setSelectedCategory("TV")}><img src='tvIcon.png' alt="icon" className={styles.icon} /></a>
-          </div>
-          <div className={styles.loginHeader}>
-            <a className={styles.login} onClick={handleOpen}>Login</a>
-            <Modal
-              open={open}
-              onClose={handleClose}
-              aria-labelledby="modal-modal-title"
-              aria-describedby="modal-modal-description"
-            >
-              <Box sx={modalstyle}>
-                <Typography id="modal-modal-title" variant="h6" component="h2">
-                  Sing in
-                </Typography>
-                <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-                  Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
-                </Typography>
-                <Button>Submit</Button>
-                <a onClick={handleClose}>Close</a>
-              </Box>
-            </Modal>
+        <div className={styles.loginHeader}>
+          <a className={styles.login} onClick={handleOpen}>Login</a>
+          <Modal
+            open={open}
+            onClose={handleClose}
+            aria-labelledby="modal-modal-title"
+            aria-describedby="modal-modal-description"
+          >
+            <Box sx={modalstyle}>
+              <div className={styles.registerContainer}>
+                <div className={styles.registerSection}>
+                  <p>Sign-up</p>
+                  <input type="text" placeholder="Username" id="username" onChange={(e) => setUsername(e.target.value)} value={username} />
+                  <input type="password" placeholder="Password" id="password" onChange={(e) => setPassword(e.target.value)} value={password} />
+                  <button id="register" onClick={() => handleSignUp}>Register</button>
+                </div>
+                <div className={styles.registerSection}>
+                  <p>Sign-in</p>
+                  <input type="text" placeholder="Username" id="username" onChange={(e) => setUsername(e.target.value)} value={username} />
+                  <input type="password" placeholder="Password" id="password" onChange={(e) => setPassword(e.target.value)} value={password} />
+                  <button id="connection" onClick={() => handleSignIn()}>Connect</button>
+                </div>
+              </div>
+              <a onClick={handleClose}>Close</a>
+            </Box>
+          </Modal>
+        </div>
 
-            <img src='ScreenSeekerRoundLogoSmall.png' alt="logo" className={styles.logo} />
-          </div>
+
+
+
+
+        <div className={styles.header}>
+          <div className={styles.buttonIconCinema} onClick={() => setSelectedCategory("MOVIES")}><img src='cinemaIcon.png' alt="icon" className={styles.icon} /></div>
+          <div className={styles.buttonIconTv} onClick={() => setSelectedCategory("TV")}><img src='tvIcon.png' alt="icon" className={styles.icon} /></div>
+          <img src='ScreenSeekerRoundLogoSmall.png' alt="logo" className={styles.logo} />
         </div>
         {/* <div>
           <Popover title="Liked movies" content={popoverContent} className={styles.popover} trigger="click">
@@ -201,7 +253,7 @@ function Home() {
                 <a className={styles.button} onClick={() => setSelectedTab("TOPRATED")}>Best Movies</a>
               </div>
               <Popover content={genrePopover} className={styles.popover} trigger="click">
-                <a className={styles.genres}>{genresButtonContent}</a>
+                <a className={styles.genresBtn}>{genresButtonContent}</a>
               </Popover>
             </div>
             {selectedTab === "LASTRELEASES" && (
@@ -224,7 +276,7 @@ function Home() {
                 <a className={styles.button} onClick={() => setSelectedTabShow("TOPRATEDSHOWS")}>Best Shows</a>
               </div>
               <Popover content={genrePopover} className={styles.popover} trigger="click">
-                <a className={styles.genres}>{genresButtonContent}</a>
+                <a className={styles.genresBtn}>{genresButtonContent}</a>
               </Popover>
             </div>
             {selectedTabShow === "LASTRELEASESSHOWS" && (

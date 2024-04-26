@@ -44,3 +44,25 @@
 .genres {
   font-style: italic;
 }
+
+@media screen and (max-width: 768px) {
+  .card {
+    width: 150px;
+  }
+
+  .image {
+    width: 150px;
+  }
+
+  .name {
+    font-size: 14px;
+  }
+
+  .description {
+    font-size: 10px;
+  }
+
+  .iconContainer {
+    font-size: 10px;
+  }
+}

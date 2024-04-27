@@ -162,7 +162,6 @@ function Home() {
   const [password, setPassword] = useState('');
   const [signInUsername, setSignInUsername] = useState('');
   const [signInPassword, setSignInPassword] = useState('');
-  const [token, setToken] = useState('');
 
   const handleSignUp = () => {
     fetch('https://my-movies-backend-iota.vercel.app/users/signup', {
@@ -207,14 +206,19 @@ function Home() {
   }
 
   const handleSignOut = () => {
-    setToken('');
+    dispatch(logout());
+    console.log('Logged out');
   }
 
   return (
     <>
       <div className={styles.main}>
         <div className={styles.loginHeader}>
-          <a className={styles.login} onClick={handleOpen}>Login</a>
+          {!user.token ? (
+            <button className={styles.login} onClick={handleOpen}>Login</button>
+          ) : (
+            <button className={styles.login} onClick={handleSignOut}>Logout</button>
+          )}
           <Modal
             open={open}
             onClose={handleClose}
@@ -224,25 +228,20 @@ function Home() {
             <Box sx={modalstyle}>
               <div className={styles.registerContainer}>
                 <div className={styles.registerSection}>
-                  <p>Sign-up</p>
                   <input type="text" placeholder="Username" id="username" onChange={(e) => setUsername(e.target.value)} value={username} />
                   <input type="password" placeholder="Password" id="password" onChange={(e) => setPassword(e.target.value)} value={password} />
-                  <button id="register" onClick={() => handleSignUp()}>Register</button>
+                  <button id="register" onClick={() => handleSignUp()}>Sing Up</button>
                 </div>
                 <div className={styles.registerSection}>
-                  <p>Sign-in</p>
                   <input type="text" placeholder="Username" id="signInUsername" onChange={(e) => setSignInUsername(e.target.value)} value={signInUsername} />
                   <input type="password" placeholder="Password" id="signInPassword" onChange={(e) => setSignInPassword(e.target.value)} value={signInPassword} />
-                  <button id="connection" onClick={() => handleSignIn()}>Connect</button>
+                  <button id="connection" onClick={() => handleSignIn()}>Sign In</button>
                 </div>
               </div>
               <a onClick={handleClose}>Close</a>
             </Box>
           </Modal>
         </div>
-
-
-
 
 
         <div className={styles.header}>

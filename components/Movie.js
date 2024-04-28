@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHeart, faStar, faVideo } from '@fortawesome/free-solid-svg-icons';
+import { faHeart, faStar, faVideo, faCircleDown } from '@fortawesome/free-solid-svg-icons';
 import styles from '../styles/Movie.module.css';
 
 function Movie(props) {
@@ -18,8 +18,14 @@ function Movie(props) {
   }
 
   // Watch movie
-  const handleWatchMovie = () => {
-    setWatchCount(watchCount + 1);
+  const handleWatchMovie = (action) => {
+    if (action === 'add') {
+      setWatchCount(watchCount + 1);
+    } else if (action === 'sub') { // Add functionality to subtract one from watch count
+      if (watchCount > 0) {
+        setWatchCount(watchCount - 1);
+      }
+    }
   };
   let videoIconStyle = { 'cursor': 'pointer' };
   if (watchCount > 0) {
@@ -31,7 +37,7 @@ function Movie(props) {
     props.updateLikedMovies(props.title);
   };
   let heartIconStyle = { 'cursor': 'pointer' };
-  if (props.isLiked) {
+  if (props.likedMovies.includes(props.title)) {
     heartIconStyle = { 'color': '#e74c3c', 'cursor': 'pointer' };
   }
 
@@ -42,8 +48,25 @@ function Movie(props) {
     if (i < personalNote) {
       style = { 'color': '#2196f3', 'cursor': 'pointer' };
     }
-    personalStars.push(<FontAwesomeIcon key={i} icon={faStar} onClick={() => setPersonalNote(i + 1)} style={style} className="note" />);
+    personalStars.push(
+      <FontAwesomeIcon
+        key={i}
+        icon={faStar}
+        onClick={() => {
+          if (i + 1 === personalNote) {
+            // Deselect the star if it's already selected
+            setPersonalNote(0);
+          } else {
+            // Otherwise, select the star
+            setPersonalNote(i + 1);
+          }
+        }}
+        style={style}
+        className="note"
+      />
+    );
   }
+
 
   // Map genre IDs to names
   const mapGenreIdsToNames = () => {
@@ -69,8 +92,9 @@ function Movie(props) {
         <div className={styles.iconContainer}>
           <span className={styles.vote}>Ratings: {stars}({props.voteCount})</span>
           <span>My note: {personalStars} ({personalNote})</span>
-          <span>Watch count: <FontAwesomeIcon icon={faVideo} onClick={() => handleWatchMovie()} style={videoIconStyle} className="watch" />({watchCount}) </span>
-          <span>I love it: <FontAwesomeIcon icon={faHeart} onClick={() => handleLikeMovie()} style={heartIconStyle} className="like" /></span>
+          <span>Watch count: <FontAwesomeIcon icon={faVideo} onClick={() => handleWatchMovie('add')} style={videoIconStyle} /> ({watchCount}) <FontAwesomeIcon icon={faCircleDown} onClick={() => handleWatchMovie('sub')} style={{ 'cursor': 'pointer', 'color': '780000' }} /> (-1)
+          </span>
+          <span>I love it: <FontAwesomeIcon icon={faHeart} onClick={() => handleLikeMovie()} style={heartIconStyle} /></span>
         </div>
       </div>
     </div>

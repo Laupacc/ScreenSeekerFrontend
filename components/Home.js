@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
-import { Popover, Button } from 'antd';
+import { Popover } from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleXmark } from '@fortawesome/free-solid-svg-icons';
+import { CgCloseR } from "react-icons/cg";
 import { Link } from 'react-router-dom';
 import Movie from './Movie';
 import 'antd/dist/antd.css';
@@ -10,6 +11,8 @@ import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
 import { useDispatch, useSelector } from 'react-redux';
 import { login, logout } from '../reducers/user';
+import Swal from 'sweetalert2'
+
 
 
 function Home() {
@@ -27,6 +30,8 @@ function Home() {
   const [topRatedMovies, setTopRatedMovies] = useState([]);
   const [topRatedTvShows, setTopRatedTvShows] = useState([]);
   const [open, setOpen] = useState(false);
+  const [signUpError, setSignUpError] = useState('');
+  const [signInError, setSignInError] = useState('');
 
 
   const modalstyle = {
@@ -41,6 +46,7 @@ function Home() {
     p: 4,
   };
 
+  // Fetch movies, TV shows, and genres data
   useEffect(() => {
     Promise.all([
       fetch('https://my-movies-backend-iota.vercel.app/movies'),
@@ -122,6 +128,8 @@ function Home() {
         genre_ids={data.genre_ids}
         releaseDate={data.release_date}
         genresData={genresData}
+        likedMovies={likedMovies}
+        updateLikedMovies={updateLikedMovies}
       />
     ));
   };
@@ -173,11 +181,17 @@ function Home() {
     })
       .then(response => response.json())
       .then(data => {
-        console.log('Success:', data);
-        dispatch(login({ username: username, token: data.token }));
-        setUsername('');
-        setPassword('');
-        setOpen(false);
+        if (data.result) {
+          console.log('Success:', data);
+          dispatch(login({ username: username, token: data.token }));
+          setUsername('');
+          setPassword('');
+          setOpen(false);
+        } else {
+          console.log('User already exists');
+          setSignUpError('User already exists. Please sign in instead.');
+
+        }
       })
       .catch((error) => {
         console.error('Error:', error);
@@ -194,11 +208,21 @@ function Home() {
     })
       .then(response => response.json())
       .then(data => {
-        console.log('Success:', data);
-        dispatch(login({ username: signInUsername, token: data.token }));
-        setSignInUsername('');
-        setSignInPassword('');
-        setOpen(false);
+        if (data.result) {
+          console.log('Success:', data);
+          dispatch(login({ username: signInUsername, token: data.token }));
+          setSignInUsername('');
+          setSignInPassword('');
+          setOpen(false);
+          Swal.fire({
+            icon: 'success',
+            title: 'Signed in successfully',
+            showConfirmButton: false,
+            timer: 1500
+          })
+        } else {
+          setSignInError('Invalid username or password');
+        }
       })
       .catch((error) => {
         console.error('Error:', error);
@@ -208,6 +232,12 @@ function Home() {
   const handleSignOut = () => {
     dispatch(logout());
     console.log('Logged out');
+    Swal.fire({
+      icon: 'success',
+      title: 'Signed out successfully',
+      showConfirmButton: false,
+      timer: 1500
+    })
   }
 
   return (
@@ -217,43 +247,60 @@ function Home() {
           {!user.token ? (
             <button className={styles.login} onClick={handleOpen}>Login</button>
           ) : (
-            <button className={styles.login} onClick={handleSignOut}>Logout</button>
+            <>
+              <div className={styles.welcome}>Welcome, {user.username}!</div>
+              <div className={styles.logoutContainer}>
+                <button className={styles.login} onClick={handleSignOut}>Logout</button>
+              </div>
+            </>
           )}
           <Modal
             open={open}
             onClose={handleClose}
-            aria-labelledby="modal-modal-title"
-            aria-describedby="modal-modal-description"
+            aria-labelledby="Login modal"
           >
             <Box sx={modalstyle}>
               <div className={styles.registerContainer}>
+
+                <div className={styles.closeBtnContainer}>
+                  <CgCloseR size={25} className={styles.closeBtn} onClick={handleClose} />
+                </div>
+
                 <div className={styles.registerSection}>
-                  <input type="text" placeholder="Username" id="username" onChange={(e) => setUsername(e.target.value)} value={username} />
-                  <input type="password" placeholder="Password" id="password" onChange={(e) => setPassword(e.target.value)} value={password} />
-                  <button id="register" onClick={() => handleSignUp()}>Sing Up</button>
+                  <p className={styles.modalTitle}>Don't have an account yet?</p>
+                  <input className={styles.input} type="text" placeholder="Username" id="username" onChange={(e) => setUsername(e.target.value)} value={username} />
+                  <input className={styles.input} type="password" placeholder="Password" id="password" onChange={(e) => setPassword(e.target.value)} value={password} />
+                  <button className={styles.modalBtn} id="signup" onClick={() => handleSignUp()}>Sing Up</button>
+                  {signUpError && <p className={styles.error}>{signUpError}</p>}
                 </div>
                 <div className={styles.registerSection}>
-                  <input type="text" placeholder="Username" id="signInUsername" onChange={(e) => setSignInUsername(e.target.value)} value={signInUsername} />
-                  <input type="password" placeholder="Password" id="signInPassword" onChange={(e) => setSignInPassword(e.target.value)} value={signInPassword} />
-                  <button id="connection" onClick={() => handleSignIn()}>Sign In</button>
+                  <p className={styles.modalTitle}>Already have an account</p>
+                  <input className={styles.input} type="text" placeholder="Username" id="signInUsername" onChange={(e) => setSignInUsername(e.target.value)} value={signInUsername} />
+                  <input className={styles.input} type="password" placeholder="Password" id="signInPassword" onChange={(e) => setSignInPassword(e.target.value)} value={signInPassword} />
+                  <button className={styles.modalBtn} id="signin" onClick={() => handleSignIn()}>Sign In</button>
+                  {signInError && <p className={styles.error}>{signInError}</p>}
                 </div>
               </div>
-              <a onClick={handleClose}>Close</a>
             </Box>
           </Modal>
         </div>
 
+        {user.token ? (
+          <div className={styles.popoverHeader}>
+            <Popover title="Liked movies" content={popoverContent} className={styles.popover} trigger="click">
+              <button>♥ {likedMovies.length} movie(s) / show(s)</button>
+            </Popover>
+          </div>
+        ) : (<></>)}
 
         <div className={styles.header}>
           <div className={styles.buttonIconCinema} onClick={() => setSelectedCategory("MOVIES")}><img src='cinemaIcon.png' alt="icon" className={styles.icon} /></div>
           <div className={styles.buttonIconTv} onClick={() => setSelectedCategory("TV")}><img src='tvIcon.png' alt="icon" className={styles.icon} /></div>
           <img src='ScreenSeekerRoundLogoSmall.png' alt="logo" className={styles.logo} />
         </div>
-        {/* <div>
-          <Popover title="Liked movies" content={popoverContent} className={styles.popover} trigger="click">
-            <Button>♥ {likedMovies.length} movie(s)</Button>
-          </Popover>
-        </div> */}
+        <div>
+
+        </div>
         {selectedCategory === "MOVIES" && (
           <>
             <div className={styles.movieHeader}>

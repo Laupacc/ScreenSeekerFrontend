@@ -27,9 +27,10 @@ function App({ Component, pageProps }) {
       <Provider store={store}>
         <PersistGate persistor={persistor}>
           <Head>
-            <title>
-              ScreenSeeker
-            </title>
+            <title>ScreenSeeker</title>
+            <link rel="icon" href="favicon.ico" />
+            <meta name="description" content="ScreenSeeker is a website where you can view movie and tv show releases, create a wishlist, track views, and rate each film" />
+            <meta name="viewport" content="width=device-width, initial-scale=1.0" />
           </Head>
           <Component {...pageProps} />
         </PersistGate>

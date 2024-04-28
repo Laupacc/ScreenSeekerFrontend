@@ -74,12 +74,25 @@
   margin: 1rem 0 0 0;
 }
 
+.popoverHeader {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+.popover {
+  cursor: pointer;
+  background-color: #548b9f;
+  color: white;
+  border: none;
+  border-radius: 0.5rem;
+  width: 12em;
+  height: 2.5em;
+  margin: 1rem 1rem 0 0;
+}
 .popover:hover {
   background-color: white;
   color: #f2a643;
-  border: none;
 }
-
 .popoverContent {
   display: flex;
   flex-direction: column;
@@ -183,6 +196,67 @@
   background-color: white;
   color: #f2a643;
   border: none;
+}
+
+.welcome {
+  margin-right: auto;
+  margin-left: 1rem;
+  font-size: 2rem;
+  color: #780000;
+}
+.logoutContainer {
+  margin-left: auto;
+}
+
+.input {
+  width: 18em;
+  height: 2.5em;
+  border-radius: 0.7rem;
+  border-color: grey;
+  margin: 1rem 1rem 0 0;
+}
+.modalBtn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  width: 8em;
+  height: 3em;
+  background-color: #f2a643;
+  color: white;
+  border: none;
+  border-radius: 0.7rem;
+  margin: 1rem 0 1rem 0;
+}
+.modalTitle {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 0;
+  font-size: 1.2rem;
+  color: #780000;
+}
+.registerSection {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.closeBtnContainer {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  flex-grow: 1;
+}
+.closeBtn {
+  cursor: pointer;
+}
+.closeBtn:hover {
+  color: #f2a643;
+}
+.error {
+  color: red;
+  font-size: 0.8rem;
 }
 
 @media screen and (max-width: 768px) {

@@ -120,13 +120,13 @@ function Home() {
     return filteredItems.map((data, i) => (
       <Component
         key={i}
-        title={data.title || data.name}
-        overview={data.overview}
-        poster={data.poster_path}
-        voteAverage={data.vote_average}
-        voteCount={data.vote_count}
-        genre_ids={data.genre_ids}
-        releaseDate={data.release_date}
+        title={data && (data.title || data.name)}
+        overview={data && data.overview}
+        poster={data && data.poster_path}
+        voteAverage={data && data.vote_average}
+        voteCount={data && data.vote_count}
+        genre_ids={data && data.genre_ids}
+        releaseDate={data && data.release_date}
         genresData={genresData}
         likedMovies={likedMovies}
         updateLikedMovies={updateLikedMovies}

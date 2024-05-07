@@ -74,7 +74,7 @@ function Movie(props) {
       return '';
     }
     const genreNames = props.genresData
-      .filter(genre => props.genre_ids.includes(genre.id))
+      .filter(genre => props.genre_ids && props.genre_ids.includes(genre.id))
       .map(genre => genre.name);
     return genreNames.join(', ');
   };
@@ -85,7 +85,8 @@ function Movie(props) {
       <div className={styles.textContainer}>
         <div>
           <span className={styles.name}>{props.title}</span>
-          <p className={styles.description}>{props.overview.length > 205 ? `${props.overview.slice(0, 250)}...` : props.overview}</p>
+          <p className={styles.description}>{props.overview && props.overview.length > 205 ? `${props.overview.slice(0, 250)}...` : props.overview}</p>
+
           <p className={styles.releaseDate}>{props.releaseDate}</p>
           <p className={styles.genres}>{mapGenreIdsToNames()}</p>
         </div>

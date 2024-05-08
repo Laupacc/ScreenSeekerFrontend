@@ -294,8 +294,8 @@ function Home() {
         ) : (<></>)}
 
         <div className={styles.header}>
-          <div className={styles.buttonIconCinema} onClick={() => setSelectedCategory("MOVIES")}><img src='cinemaIcon.png' alt="icon" className={styles.icon} /></div>
-          <div className={styles.buttonIconTv} onClick={() => setSelectedCategory("TV")}><img src='tvIcon.png' alt="icon" className={styles.icon} /></div>
+          <div className={styles.buttonIconCinema} onClick={() => setSelectedCategory("MOVIES")} data-text="Movies"><img src='cinemaIcon.png' alt="icon" className={styles.icon} /></div>
+          <div className={styles.buttonIconTv} onClick={() => setSelectedCategory("TV")} data-text="TV Shows" ><img src='tvIcon.png' alt="icon" className={styles.icon} /></div>
           <img src='ScreenSeekerRoundLogoSmall.png' alt="logo" className={styles.logo} />
         </div>
         <div>

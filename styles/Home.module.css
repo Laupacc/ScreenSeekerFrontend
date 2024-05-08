@@ -1,3 +1,12 @@
+@font-face {
+  font-family: Cinema;
+  src: url(/cinema_st.ttf) format("truetype");
+}
+@font-face {
+  font-family: Premier;
+  src: url(/Film_Premieres.otf) format("opentype");
+}
+
 .main {
   width: 100vw;
   margin: 0;
@@ -22,48 +31,54 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-left: 12em;
+  margin-left: 12rem;
 }
 .icon {
   width: 100%;
   height: auto;
   cursor: pointer;
 }
-
-.buttonIconTv:hover::after {
-  content: "TV Shows";
-  position: absolute;
-  background-color: #faf1e2;
-  color: #d48a0d;
-  border-radius: 4px;
-  padding: 5px;
-  width: 120px;
-  height: 50px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 20px;
+.buttonIconTv,
+.buttonIconCinema {
+  position: relative;
 }
 
 .buttonIconCinema:hover::after {
   content: "Movies";
+  font-family: Cinema;
   position: absolute;
-  background-color: #faf1e2;
-  color: #d48a0d;
-  border-radius: 4px;
-  padding: 5px;
-  width: 120px;
-  height: 50px;
+  top: 3.4rem;
+  left: -0.5rem;
+  color: rgb(100, 100, 100);
+  width: 15rem;
+  height: 5rem;
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 20px;
+  font-size: 2.8rem;
+  cursor: pointer;
 }
 
-.title {
-  max-width: 100vw;
-  margin: 40px 0px 0px 60px;
-  font-weight: 600;
+.buttonIconTv:hover::after {
+  content: "TV Shows";
+  font-family: Cinema;
+  position: absolute;
+  top: 2.2rem;
+  left: -1rem;
+  color: rgb(100, 100, 100);
+  text-align: center;
+  width: 15rem;
+  height: 5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 2.8rem;
+  cursor: pointer;
+}
+
+.buttonIconTv:hover .icon,
+.buttonIconCinema:hover .icon {
+  opacity: 0;
 }
 
 .moviesContainer {
@@ -86,7 +101,7 @@
   border: none;
   border-radius: 0.5rem;
   width: 12em;
-  height: 2.5em;
+  height: 2.5rem;
   margin: 1rem 1rem 0 0;
 }
 .popover:hover {
@@ -105,7 +120,7 @@
 }
 .crossIcon {
   cursor: pointer;
-  margin: 0px 10px 0px 20px;
+  margin: 0 0.3rem 0 1.5rem;
 }
 .button {
   display: flex;
@@ -114,9 +129,9 @@
   background-color: #780000;
   color: white;
   border: none;
-  border-radius: 8px;
-  width: 12em;
-  height: 3em;
+  border-radius: 0.5rem;
+  width: 11rem;
+  height: 2.8rem;
   cursor: pointer;
 }
 .button:hover {
@@ -131,7 +146,7 @@
   background-color: #548b9f;
   height: 8vh;
   width: 80vw;
-  border-radius: 30px;
+  border-radius: 1.5rem;
 }
 .movieHeader {
   display: flex;
@@ -145,33 +160,33 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  margin: 5px 10px 5px 30px;
+  margin: 0 1rem 0 1rem;
   cursor: pointer;
-  width: 12em;
-  height: 3em;
+  width: 11rem;
+  height: 2.8rem;
   background-color: #f2a643;
   color: white;
   border: none;
-  border-radius: 8px;
+  border-radius: 0.5rem;
 }
 .genreContent {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin: 5px 10px 5px 10px;
+  margin: 0.5rem 0.5rem 0.5rem 0.5rem;
   cursor: pointer;
 }
 .genreContent:hover {
   background-color: #f2a643;
   color: white;
   border: none;
-  border-radius: 4px;
+  border-radius: 0.3rem;
 }
 .selectedGenre {
   background-color: #780000;
   color: white;
   border: none;
-  border-radius: 4px;
+  border-radius: 0.3rem;
 }
 .loginHeader {
   display: flex;
@@ -184,8 +199,8 @@
   justify-content: center;
   align-items: center;
   cursor: pointer;
-  width: 12em;
-  height: 3em;
+  width: 11em;
+  height: 2.8rem;
   background-color: #f2a643;
   color: white;
   border: none;
@@ -203,25 +218,27 @@
   margin-left: 1rem;
   font-size: 2rem;
   color: #780000;
+  text-transform: capitalize;
 }
 .logoutContainer {
   margin-left: auto;
 }
 
 .input {
-  width: 18em;
-  height: 2.5em;
+  width: 18rem;
+  height: 2.5rem;
   border-radius: 0.7rem;
   border-color: grey;
   margin: 1rem 1rem 0 0;
+  padding-left: 0.5rem;
 }
 .modalBtn {
   display: flex;
   justify-content: center;
   align-items: center;
   cursor: pointer;
-  width: 8em;
-  height: 3em;
+  width: 7.5rem;
+  height: 2.8rem;
   background-color: #f2a643;
   color: white;
   border: none;
@@ -259,21 +276,163 @@
   font-size: 0.8rem;
 }
 
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 460px) {
   .icon {
-    width: 50%;
+    width: 65%;
     height: auto;
   }
   .button {
-    width: 8em;
-    height: 2.5em;
+    width: 6rem;
+    height: 2rem;
+    margin: 0 0.3rem 0 0.3rem;
   }
   .genresBtn {
-    width: 8em;
-    height: 2.5em;
+    width: 10rem;
+    height: 2rem;
+    margin: 0 0.5rem 0 0.5rem;
+  }
+  .buttonHeader {
+    width: 60vw;
   }
   .login {
-    width: 8em;
-    height: 2.5em;
+    width: 6.5rem;
+    height: 2rem;
+  }
+  .input {
+    width: 12rem;
+    height: 2rem;
+  }
+  .modalBtn {
+    width: 6.5rem;
+    height: 2rem;
+  }
+  .modalTitle {
+    font-size: 1rem;
+  }
+  .welcome {
+    font-size: 1.5rem;
+  }
+  .popoverContent {
+    font-size: 0.8rem;
+  }
+  .popoverContent:hover {
+    font-size: 0.8rem;
+  }
+  .likedMoviesContainer {
+    margin: 0 0.3rem 0 0.3rem;
+  }
+  .genreContent {
+    width: 5.3rem;
+    height: 2rem;
+    margin: 0.3rem 0.3rem 0.3rem 0.3rem;
+    font-size: 0.7rem;
+  }
+  .genreContent:hover {
+    width: 5.3rem;
+    height: 2rem;
+  }
+  .selectedGenre {
+    width: 5.3rem;
+    height: 2rem;
+  }
+  .closeBtn {
+    font-size: 0.8rem;
+  }
+  .error {
+    font-size: 0.6rem;
+  }
+  .loginHeader {
+    margin-right: 0.5rem;
+  }
+  .buttonIconTv,
+  .buttonIconCinema {
+    margin: 0 0.5rem 0 0.5rem;
+  }
+  .topButtonsHeader {
+    margin-left: 0;
+  }
+  .buttonIconCinema:hover::after {
+    top: -1rem;
+    left: -3.5rem;
+    font-size: 1.4rem;
+  }
+  .buttonIconTv:hover::after {
+    top: -1.5rem;
+    left: -0.6rem;
+    width: 8rem;
+    font-size: 1.4rem;
+  }
+}
+
+@media screen and (min-width: 460px) and (max-width: 768px) {
+  .icon {
+    width: 65%;
+    height: auto;
+  }
+  .button {
+    width: 6.5rem;
+    height: 2rem;
+  }
+  .login {
+    width: 6.5rem;
+    height: 2rem;
+  }
+  .input {
+    width: 12rem;
+    height: 2rem;
+  }
+  .modalBtn {
+    width: 6.5rem;
+    height: 2rem;
+  }
+  .modalTitle {
+    font-size: 1rem;
+  }
+  .welcome {
+    font-size: 1.5rem;
+  }
+  .popoverContent {
+    font-size: 0.8rem;
+  }
+  .popoverContent:hover {
+    font-size: 0.8rem;
+  }
+  .likedMoviesContainer {
+    margin: 0 0.3rem 0 0.3rem;
+  }
+  .genreContent {
+    width: 5.3rem;
+    height: 2rem;
+    margin: 0.3rem 0.3rem 0.3rem 0.3rem;
+    font-size: 0.7rem;
+  }
+  .genreContent:hover {
+    width: 5.3rem;
+    height: 2rem;
+  }
+  .selectedGenre {
+    width: 5.3rem;
+    height: 2rem;
+  }
+  .closeBtn {
+    font-size: 0.8rem;
+  }
+  .error {
+    font-size: 0.6rem;
+  }
+  .loginHeader {
+    margin-right: 0.5rem;
+  }
+  .buttonIconCinema:hover::after {
+    top: 1rem;
+    left: -1rem;
+    font-size: 1.4rem;
+  }
+
+  .buttonIconTv:hover::after {
+    top: 0rem;
+    left: 1rem;
+    width: 8rem;
+    font-size: 1.4rem;
   }
 }

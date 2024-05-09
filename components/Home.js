@@ -13,6 +13,8 @@ import { login, logout } from '../reducers/user';
 import { addLikedMovie, removeLikedMovie } from '../reducers/liked';
 import Swal from 'sweetalert2'
 import { ColorRing } from 'react-loader-spinner'
+import { PiArrowFatLinesUpDuotone } from "react-icons/pi";
+import { TbArrowBigUpLinesFilled } from "react-icons/tb";
 
 
 
@@ -291,6 +293,13 @@ function Home() {
     });
   }
 
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth"
+    });
+  };
+
   return (
     <>
       <div className={styles.main}>
@@ -420,7 +429,7 @@ function Home() {
           </>
         )}
       </div>
-
+      <TbArrowBigUpLinesFilled onClick={scrollToTop} className={styles.backToTopBtn} size={40} color='#548b9f' />
     </>
   );
 }

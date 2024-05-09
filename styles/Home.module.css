@@ -297,6 +297,17 @@
   border-radius: 0.5rem;
 }
 
+.backToTopBtn {
+  position: fixed;
+  bottom: 1rem;
+  right: 1rem;
+  cursor: pointer;
+  z-index: 999;
+}
+.backToTopBtn:hover {
+  opacity: 0.7;
+}
+
 @media screen and (max-width: 460px) {
   .icon {
     width: 65%;
@@ -331,7 +342,8 @@
     font-size: 1rem;
   }
   .welcome {
-    font-size: 1.5rem;
+    font-size: 1rem;
+    margin-left: 2.5rem;
   }
   .popoverContent {
     font-size: 0.8rem;
@@ -391,6 +403,12 @@
     width: 6rem;
     height: 1.5rem;
     font-size: 0.6rem;
+  }
+  .backToTopBtn {
+    bottom: 0.5rem;
+    right: 0;
+    width: 2rem;
+    height: 2rem;
   }
 }
 
@@ -472,5 +490,19 @@
     width: 6rem;
     height: 1.5rem;
     font-size: 0.6rem;
+  }
+  .backToTopBtn {
+    bottom: 0.5rem;
+    right: 0;
+    width: 2rem;
+    height: 2rem;
+  }
+}
+@media screen and (min-width: 570px) and (max-width: 1210px) {
+  .backToTopBtn {
+    bottom: 0.5rem;
+    right: 0;
+    width: 2rem;
+    height: 2rem;
   }
 }

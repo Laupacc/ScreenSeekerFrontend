@@ -3,7 +3,6 @@ import { Popover } from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleXmark } from '@fortawesome/free-solid-svg-icons';
 import { CgCloseR } from "react-icons/cg";
-import { Link } from 'react-router-dom';
 import Movie from './Movie';
 import 'antd/dist/antd.css';
 import styles from '../styles/Home.module.css';
@@ -11,18 +10,22 @@ import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
 import { useDispatch, useSelector } from 'react-redux';
 import { login, logout } from '../reducers/user';
+import { addLikedMovie, removeLikedMovie } from '../reducers/liked';
 import Swal from 'sweetalert2'
+import { ColorRing } from 'react-loader-spinner'
 
 
 
 function Home() {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user.value);
+  const liked = useSelector((state) => state.liked.value);
+
 
   const [selectedCategory, setSelectedCategory] = useState("MOVIES");
   const [selectedTab, setSelectedTab] = useState("LASTRELEASES");
   const [selectedTabShow, setSelectedTabShow] = useState("LASTRELEASESSHOWS");
-  const [likedMovies, setLikedMovies] = useState([]);
+  // const [likedMovies, setLikedMovies] = useState([]);
   const [selectedGenres, setSelectedGenres] = useState([]);
   const [moviesData, setMoviesData] = useState([]);
   const [tvData, setTvData] = useState([]);
@@ -44,6 +47,16 @@ function Home() {
     border: '2px solid #000',
     boxShadow: 24,
     p: 4,
+  };
+
+  ColorRing.defaultProps = {
+    visible: true,
+    height: 100,
+    width: 100,
+    ariaLabel: 'color-ring-loading',
+    wrapperStyle: {},
+    wrapperClass: 'color-ring-wrapper',
+    colors: ['#e15b64', '#f47e60', '#f8b26a', '#abbd81', '#849b87'],
   };
 
   // Fetch movies, TV shows, and genres data
@@ -72,23 +85,40 @@ function Home() {
 
 
   // Liked movies (inverse data flow)
+  // const updateLikedMovies = (movieTitle) => {
+  //   if (likedMovies.find(movie => movie === movieTitle)) {
+  //     setLikedMovies(likedMovies.filter(movie => movie !== movieTitle));
+  //   } else {
+  //     setLikedMovies([...likedMovies, movieTitle]);
+  //   }
+  // };
+
   const updateLikedMovies = (movieTitle) => {
-    if (likedMovies.find(movie => movie === movieTitle)) {
-      setLikedMovies(likedMovies.filter(movie => movie !== movieTitle));
+    if (liked.find(movie => movie.title === movieTitle)) {
+      dispatch(removeLikedMovie({ title: movieTitle }));
     } else {
-      setLikedMovies([...likedMovies, movieTitle]);
+      dispatch(addLikedMovie({ title: movieTitle }));
     }
   };
 
+
   // Liked movies popover content
-  const likedMoviesPopover = likedMovies.map((data, i) => {
-    return (
-      <div key={i} className={styles.likedMoviesContainer}>
-        <span className="likedMovie">{data}</span>
-        <FontAwesomeIcon icon={faCircleXmark} onClick={() => updateLikedMovies(data)} className={styles.crossIcon} />
-      </div>
-    );
-  });
+  // const likedMoviesPopover = liked.map((data, i) => {
+  //   return (
+  //     <div key={i} className={styles.likedMoviesContainer}>
+  //       <span className="likedMovie">{data}</span>
+  //       <FontAwesomeIcon icon={faCircleXmark} onClick={() => updateLikedMovies(data)} className={styles.crossIcon} />
+  //     </div>
+  //   );
+  // });
+
+  const likedMoviesPopover = liked.map((movie, i) => (
+    <div key={i} className={styles.likedMoviesContainer}>
+      <span>{movie.title}</span>
+      <FontAwesomeIcon icon={faCircleXmark} onClick={() => updateLikedMovies(movie.title)} className={styles.crossIcon} />
+    </div>
+  ));
+
 
   // Liked movies popover
   const popoverContent = (
@@ -128,7 +158,7 @@ function Home() {
         genre_ids={data && data.genre_ids}
         releaseDate={data && data.release_date}
         genresData={genresData}
-        likedMovies={likedMovies}
+        likedMovies={liked}
         updateLikedMovies={updateLikedMovies}
       />
     ));
@@ -148,14 +178,36 @@ function Home() {
   const topRatedTv = mapFilteredItemsToComponents(filteredTopRatedTvShows, Movie);
 
   // Genres map
-  const genrePopover = genresData.map((data, i) => {
-    const isSelected = selectedGenres.includes(data.id);
-    return (
-      <div key={i} className={`${styles.genreContent} ${isSelected ? styles.selectedGenre : ''}`} onClick={() => toggleGenre(data.id)}>
-        {data.name}
-      </div>
-    );
-  });
+  // const genrePopover = genresData.map((data, i) => {
+  //   const isSelected = selectedGenres.includes(data.id);
+  //   return (
+  //       <div key={i} className={`${styles.genreContent} ${isSelected ? styles.selectedGenre : ''}`} onClick={() => toggleGenre(data.id)}>
+  //         {data.name}
+  //       </div>
+  //   );
+  // });
+
+  const genrePopover = (
+    <div className={styles.genresPopoverContent}>
+      {selectedGenres && (
+        <button className={styles.clearGenresButton} onClick={() => setSelectedGenres([])}>
+          Clear All Genres
+        </button>
+      )}
+      {genresData.map((data, i) => {
+        const isSelected = selectedGenres.includes(data.id);
+        return (
+          <div
+            key={i}
+            className={`${styles.genreContent} ${isSelected ? styles.selectedGenre : ''}`}
+            onClick={() => toggleGenre(data.id)}
+          >
+            {data.name}
+          </div>
+        );
+      })}
+    </div>
+  );
 
   // Genres button content
   const selectedGenresCount = selectedGenres.length;
@@ -190,7 +242,6 @@ function Home() {
         } else {
           console.log('User already exists');
           setSignUpError('User already exists. Please sign in instead.');
-
         }
       })
       .catch((error) => {
@@ -219,7 +270,7 @@ function Home() {
             title: 'Signed in successfully',
             showConfirmButton: false,
             timer: 1500
-          })
+          });
         } else {
           setSignInError('Invalid username or password');
         }
@@ -237,7 +288,7 @@ function Home() {
       title: 'Signed out successfully',
       showConfirmButton: false,
       timer: 1500
-    })
+    });
   }
 
   return (
@@ -288,7 +339,7 @@ function Home() {
         {user.token ? (
           <div className={styles.popoverHeader}>
             <Popover title="Liked movies" content={popoverContent} className={styles.popover} trigger="click">
-              <button>♥ {likedMovies.length} movie(s) / show(s)</button>
+              <button>♥ {liked.length} movie(s) / show(s)</button>
             </Popover>
           </div>
         ) : (<></>)}
@@ -314,12 +365,23 @@ function Home() {
             </div>
             {selectedTab === "LASTRELEASES" && (
               <div className={styles.moviesContainer}>
-                {moviesData.length > 0 ? movies : <p>Loading...</p>}
+                {moviesData.length > 0 ? (
+                  filterItemsByGenres(moviesData, selectedGenres).length > 0 ?
+                    movies :
+                    <p className={styles.loading}>Sorry, there are no matches for the selected genre</p>
+                ) : <ColorRing />
+                }
               </div>
+
             )}
             {selectedTab === "TOPRATED" && (
               <div className={styles.moviesContainer}>
-                {topRatedMovies.length > 0 ? topRated : <p>Loading...</p>}
+                {topRatedMovies.length > 0 ? (
+                  filterItemsByGenres(topRatedMovies, selectedGenres).length > 0 ?
+                    topRated :
+                    <p className={styles.loading}>Sorry, there are no matches for the selected genre</p>
+                ) : <ColorRing />
+                }
               </div>
             )}
           </>
@@ -337,12 +399,22 @@ function Home() {
             </div>
             {selectedTabShow === "LASTRELEASESSHOWS" && (
               <div className={styles.moviesContainer}>
-                {tvData.length > 0 ? tv : <p>Loading...</p>}
+                {tvData.length > 0 ? (
+                  filterItemsByGenres(tvData, selectedGenres).length > 0 ?
+                    tv :
+                    <p className={styles.loading}>Sorry, there are no matches for the selected genre</p>
+                ) : <ColorRing />
+                }
               </div>
             )}
             {selectedTabShow === "TOPRATEDSHOWS" && (
               <div className={styles.moviesContainer}>
-                {topRatedTvShows.length > 0 ? topRatedTv : <p>Loading...</p>}
+                {topRatedTvShows.length > 0 ?
+                  (filterItemsByGenres(topRatedTvShows, selectedGenres).length > 0 ?
+                    topRatedTv :
+                    <p className={styles.loading}>Sorry, there are no matches for the selected genre</p>
+                  ) : <ColorRing />
+                }
               </div>
             )}
           </>

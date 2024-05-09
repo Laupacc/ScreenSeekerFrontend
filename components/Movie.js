@@ -93,9 +93,13 @@ function Movie(props) {
         <div className={styles.iconContainer}>
           <span className={styles.vote}>Ratings: {stars}({props.voteCount})</span>
           <span>My note: {personalStars} ({personalNote})</span>
-          <span>Watch count: <FontAwesomeIcon icon={faVideo} onClick={() => handleWatchMovie('add')} style={videoIconStyle} /> ({watchCount}) <FontAwesomeIcon icon={faCircleDown} onClick={() => handleWatchMovie('sub')} style={{ 'cursor': 'pointer', 'color': '780000' }} /> (-1)
+          <span>Watch count: <FontAwesomeIcon icon={faVideo} onClick={() => handleWatchMovie('add')} style={videoIconStyle} />
+            ({watchCount})
+            <FontAwesomeIcon icon={faCircleDown} onClick={() => handleWatchMovie('sub')} style={{ 'cursor': 'pointer', 'color': '780000' }} /> (-1)
           </span>
-          <span>I love it: <FontAwesomeIcon icon={faHeart} onClick={() => handleLikeMovie()} style={heartIconStyle} /></span>
+          <span>I love it:
+            <FontAwesomeIcon icon={faHeart} onClick={() => handleLikeMovie()} style={heartIconStyle} />
+          </span>
         </div>
       </div>
     </div>

@@ -276,6 +276,26 @@
   color: red;
   font-size: 0.8rem;
 }
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 3rem;
+  font-family: Premier;
+  font-size: 3rem;
+}
+
+.clearGenresButton {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  width: 7.5rem;
+  height: 1.5rem;
+  background-color: lightgray;
+  border: 0.5px solid gray;
+  border-radius: 0.5rem;
+}
 
 @media screen and (max-width: 460px) {
   .icon {
@@ -290,7 +310,7 @@
   .genresBtn {
     width: 10rem;
     height: 2rem;
-    margin: 0 0.5rem 0 0.5rem;
+    margin: 0 0.2rem 0 0.2rem;
   }
   .buttonHeader {
     width: 60vw;
@@ -363,6 +383,15 @@
     width: 8rem;
     font-size: 1.4rem;
   }
+  .loading {
+    font-size: 0.8rem;
+    margin-top: 1.5rem;
+  }
+  .clearGenresButton {
+    width: 6rem;
+    height: 1.5rem;
+    font-size: 0.6rem;
+  }
 }
 
 @media screen and (min-width: 460px) and (max-width: 768px) {
@@ -429,11 +458,19 @@
     left: -1rem;
     font-size: 1.4rem;
   }
-
   .buttonIconTv:hover::after {
     top: 0rem;
     left: 1rem;
     width: 8rem;
     font-size: 1.4rem;
+  }
+  .loading {
+    font-size: 1.2rem;
+    margin-top: 2rem;
+  }
+  .clearGenresButton {
+    width: 6rem;
+    height: 1.5rem;
+    font-size: 0.6rem;
   }
 }

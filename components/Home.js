@@ -64,12 +64,12 @@ function Home() {
   // Fetch movies, TV shows, and genres data
   useEffect(() => {
     Promise.all([
-      fetch('https://my-movies-backend-iota.vercel.app/movies'),
-      fetch('https://my-movies-backend-iota.vercel.app/tv'),
-      fetch('https://my-movies-backend-iota.vercel.app/genresmovie'),
-      fetch('https://my-movies-backend-iota.vercel.app/genrestv'),
-      fetch('https://my-movies-backend-iota.vercel.app/topratedmovies'),
-      fetch('https://my-movies-backend-iota.vercel.app/topratedtv')
+      fetch('https://screenseeker-backend.vercel.app/movies'),
+      fetch('https://screenseeker-backend.vercel.app/tv'),
+      fetch('https://screenseeker-backend.vercel.app/genresmovie'),
+      fetch('https://screenseeker-backend.vercel.app/genrestv'),
+      fetch('https://screenseeker-backend.vercel.app/topratedmovies'),
+      fetch('https://screenseeker-backend.vercel.app/topratedtv')
     ])
       .then(responses => Promise.all(responses.map(response => response.json())))
       .then(data => {
@@ -212,7 +212,7 @@ function Home() {
   const [signInPassword, setSignInPassword] = useState('');
 
   const handleSignUp = () => {
-    fetch('https://my-movies-backend-iota.vercel.app/users/signup', {
+    fetch('https://screenseeker-backend.vercel.app/users/signup', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -238,7 +238,7 @@ function Home() {
   }
 
   const handleSignIn = () => {
-    fetch('https://my-movies-backend-iota.vercel.app/users/signin', {
+    fetch('https://screenseeker-backend.vercel.app/users/signin', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

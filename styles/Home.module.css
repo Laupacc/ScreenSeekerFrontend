@@ -101,13 +101,13 @@
   color: white;
   border: none;
   border-radius: 0.5rem;
-  width: 12em;
-  height: 2.5rem;
+  width: 11em;
+  height: 3rem;
   margin: 1rem 1rem 0 0;
 }
 .popover:hover {
-  background-color: white;
-  color: #f2a643;
+  background-color: lightgrey;
+  color: #548b9f;
 }
 .popoverContent {
   display: flex;
@@ -136,7 +136,7 @@
   cursor: pointer;
 }
 .button:hover {
-  background-color: white;
+  background-color: lightgrey;
   color: #780000;
   border: none;
 }
@@ -157,19 +157,6 @@
   top: 2%; */
 }
 
-.genresBtn {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin: 0 1rem 0 1rem;
-  cursor: pointer;
-  width: 11rem;
-  height: 2.8rem;
-  background-color: #f2a643;
-  color: white;
-  border: none;
-  border-radius: 0.5rem;
-}
 .genreContent {
   display: flex;
   justify-content: center;
@@ -194,7 +181,6 @@
   justify-content: flex-end;
   align-items: center;
 }
-
 .login {
   display: flex;
   justify-content: center;
@@ -209,7 +195,7 @@
   margin: 1rem 1rem 0 0;
 }
 .login:hover {
-  background-color: white;
+  background-color: lightgrey;
   color: #f2a643;
   border: none;
 }
@@ -224,7 +210,6 @@
 .logoutContainer {
   margin-left: auto;
 }
-
 .input {
   width: 18rem;
   height: 2.5rem;
@@ -284,7 +269,6 @@
   font-family: Premier;
   font-size: 3rem;
 }
-
 .clearGenresButton {
   display: flex;
   justify-content: center;
@@ -296,7 +280,6 @@
   border: 0.5px solid gray;
   border-radius: 0.5rem;
 }
-
 .backToTopBtn {
   position: fixed;
   bottom: 1rem;
@@ -306,6 +289,48 @@
 }
 .backToTopBtn:hover {
   opacity: 0.7;
+}
+
+.popoverSection {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-left: 0.5rem;
+}
+
+.bottomPopoversBtn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0.2rem 0.6rem 0.2rem 0.6rem;
+  cursor: pointer;
+  width: 7rem;
+  height: 2rem;
+  background-color: grey;
+  color: white;
+  border: none;
+  border-radius: 0.3rem;
+}
+
+.bottomPopoversBtn:hover {
+  background-color: lightgray;
+  color: black;
+}
+.filterPopoverContent{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.2rem;
+  margin: 0.5rem 0.5rem 0.5rem 0.5rem;
+  cursor: pointer;
+}
+.filterPopoverContent:hover {
+  background-color: #f2a643;
+  color: white;
+  border: none;
+  border-radius: 0.3rem;
 }
 
 @media screen and (max-width: 460px) {

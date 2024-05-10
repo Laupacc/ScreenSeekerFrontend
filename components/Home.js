@@ -34,7 +34,6 @@ function Home() {
   const [genresTvData, setGenresTvData] = useState([]);
   const [topRatedMovies, setTopRatedMovies] = useState([]);
   const [topRatedTvShows, setTopRatedTvShows] = useState([]);
-  const [open, setOpen] = useState(false);
   const [signUpError, setSignUpError] = useState('');
   const [signInError, setSignInError] = useState('');
 
@@ -129,6 +128,11 @@ function Home() {
     );
   };
 
+  const formatedDate = (date) => {
+    const options = { year: 'numeric', month: 'short', day: 'numeric' };
+    return new Date(date).toLocaleDateString('en-US', options);
+  };
+
   // Function to map filtered items to components
   const mapFilteredItemsToComponents = (filteredItems, Component) => {
     return filteredItems.map((data, i) => (
@@ -140,7 +144,8 @@ function Home() {
         voteAverage={data && data.vote_average}
         voteCount={data && data.vote_count}
         genre_ids={data && data.genre_ids}
-        releaseDate={data && data.release_date}
+        releaseDate={data && formatedDate(data.release_date)}
+        popularity={data && data.popularity}
         genresData={selectedCategory === "MOVIES" ? genresMovieData : genresTvData}
         likedMovies={liked}
         updateLikedMovies={updateLikedMovies}
@@ -163,7 +168,7 @@ function Home() {
 
 
   const genrePopover = (
-    <div className={styles.genresPopoverContent}>
+    <div >
       {selectedGenres && (
         <button className={styles.clearGenresButton} onClick={() => setSelectedGenres([])}>
           Clear All Genres
@@ -196,12 +201,13 @@ function Home() {
     </div>
   );
 
-
   // Genres button content
   const selectedGenresCount = selectedGenres.length;
   const genresButtonContent = selectedGenresCount > 0 ? `Genres (${selectedGenresCount} selected)` : 'Genres';
 
+
   // Login modal
+  const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
@@ -286,6 +292,58 @@ function Home() {
     });
   };
 
+
+  // Function to apply filter based on criteria and sortOrder
+  const applyFilter = (criteria, sortOrder) => {
+
+    // Helper function to sort data array
+    const sortDataArray = (dataArray, compareFunction) => {
+      return [...dataArray].sort(compareFunction);
+    };
+
+    // Compare functions for sorting based on criteria and sortOrder
+    const compareFunctions = {
+      date: (a, b) => sortOrder === "asc" ? new Date(a.release_date) - new Date(b.release_date) : new Date(b.release_date) - new Date(a.release_date),
+      vote: (a, b) => sortOrder === "asc" ? a.vote_average - b.vote_average : b.vote_average - a.vote_average,
+      popularity: (a, b) => sortOrder === "asc" ? a.popularity - b.popularity : b.popularity - a.popularity
+    };
+
+    // Sort each data array based on the selected criteria and sortOrder
+    setMoviesData(sortDataArray(moviesData, compareFunctions[criteria]));
+    setTvData(sortDataArray(tvData, compareFunctions[criteria]));
+    setTopRatedMovies(sortDataArray(topRatedMovies, compareFunctions[criteria]));
+    setTopRatedTvShows(sortDataArray(topRatedTvShows, compareFunctions[criteria]));
+  };
+
+  const clearFilters = () => {
+    if (selectedCategory === "MOVIES" && selectedTab === "LASTRELEASES") {
+      applyFilter('popularity', 'desc');
+    } else if (selectedCategory === "MOVIES" && selectedTab === "TOPRATED") {
+      applyFilter('vote', 'desc');
+    } else if (selectedCategory === "TV" && selectedTabShow === "LASTRELEASESSHOWS") {
+      applyFilter('popularity', 'desc');
+    } else if (selectedCategory === "TV" && selectedTabShow === "TOPRATEDSHOWS") {
+      applyFilter('vote', 'desc');
+    }
+  };
+
+  const filterPopover = (
+    <div>
+      <button className={styles.clearGenresButton} onClick={clearFilters}>Clear All Filters</button>
+      {selectedCategory !== "TV" && (
+        <>
+          <div className={styles.filterPopoverContent} onClick={() => applyFilter("date", "asc")}>Release date ↑</div>
+          <div className={styles.filterPopoverContent} onClick={() => applyFilter("date", "desc")}>Release date ↓</div>
+        </>
+      )}
+      <div className={styles.filterPopoverContent} onClick={() => applyFilter("vote", "asc")}>Vote average ↑</div>
+      <div className={styles.filterPopoverContent} onClick={() => applyFilter("vote", "desc")}>Vote average ↓</div>
+      <div className={styles.filterPopoverContent} onClick={() => applyFilter("popularity", "asc")}>Popularity ↑</div>
+      <div className={styles.filterPopoverContent} onClick={() => applyFilter("popularity", "desc")}>Popularity ↓</div>
+    </div>
+  );
+
+
   return (
     <>
       <div className={styles.main}>
@@ -354,9 +412,17 @@ function Home() {
                 <a className={styles.button} onClick={() => setSelectedTab("LASTRELEASES")}>New Movies</a>
                 <a className={styles.button} onClick={() => setSelectedTab("TOPRATED")}>Best Movies</a>
               </div>
-              <Popover content={genrePopover} className={styles.popover} trigger="click">
-                <a className={styles.genresBtn}>{genresButtonContent}</a>
-              </Popover>
+
+              <div className={styles.popoverSection}>
+                <Popover content={genrePopover} trigger="click" className={styles.bottomPopovers}>
+                  <a className={styles.bottomPopoversBtn}>{genresButtonContent}</a>
+                </Popover>
+
+                <Popover placement="bottom" content={filterPopover} trigger="click" className={styles.bottomPopovers}>
+                  <a className={styles.bottomPopoversBtn}>Filter</a>
+                </Popover>
+              </div>
+
             </div>
             {selectedTab === "LASTRELEASES" && (
               <div className={styles.moviesContainer}>
@@ -388,9 +454,15 @@ function Home() {
                 <a className={styles.button} onClick={() => setSelectedTabShow("LASTRELEASESSHOWS")}>New Shows</a>
                 <a className={styles.button} onClick={() => setSelectedTabShow("TOPRATEDSHOWS")}>Best Shows</a>
               </div>
-              <Popover content={genrePopover} className={styles.popover} trigger="click">
-                <a className={styles.genresBtn}>{genresButtonContent}</a>
-              </Popover>
+              <div className={styles.popoverS}>
+                <Popover content={genrePopover} trigger="click" className={styles.bottomPopovers}>
+                  <a className={styles.bottomPopoversBtn}>{genresButtonContent}</a>
+                </Popover>
+
+                <Popover placement="bottom" content={filterPopover} trigger="click" className={styles.bottomPopovers}>
+                  <a className={styles.bottomPopoversBtn}>Filter</a>
+                </Popover>
+              </div>
             </div>
             {selectedTabShow === "LASTRELEASESSHOWS" && (
               <div className={styles.moviesContainer}>

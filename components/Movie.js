@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHeart, faStar, faVideo, faCircleDown, faPercentage } from '@fortawesome/free-solid-svg-icons';
 import styles from '../styles/Movie.module.css';
+import { FaHeartCirclePlus, FaHeartCircleMinus } from "react-icons/fa6";
 
 function Movie(props) {
   const [watchCount, setWatchCount] = useState(0);
@@ -51,12 +52,22 @@ function Movie(props) {
   }
 
   // Like movie
+  // const handleLikeMovie = () => {
+  //   props.updateLikedMovies(props.title);
+  // };
+  // let heartIconStyle = { 'cursor': 'pointer' };
+  // if (props.likedMovies.includes(props.title)) {
+  //   heartIconStyle = { 'color': '#e74c3c', 'cursor': 'pointer' };
+  // }
+
   const handleLikeMovie = () => {
     props.updateLikedMovies(props.title);
   };
   let heartIconStyle = { 'cursor': 'pointer' };
+  let heartIcon = <FaHeartCirclePlus style={heartIconStyle} size={26} />;
   if (props.likedMovies.includes(props.title)) {
-    heartIconStyle = { 'color': '#e74c3c', 'cursor': 'pointer' };
+    heartIconStyle = { 'color': 'rgb(206, 7, 7)' };
+    heartIcon = <FaHeartCircleMinus style={heartIconStyle} size={26} />;
   }
 
   // Personal note
@@ -107,26 +118,30 @@ function Movie(props) {
         <img className={styles.image} src={`https://image.tmdb.org/t/p/w500/${props.poster}`} alt={props.title} />
       </a>
       <div className={styles.textContainer}>
+        <div className={styles.heartIcon} >
+          <div className={styles.heartIcon} onClick={handleLikeMovie}>{heartIcon}</div>
+        </div>
         <div>
-          <a href={generateGoogleSearchLink()} target="_blank" rel="noopener noreferrer" className={styles.name}>{props.title}</a>
+          <div className={styles.topTitle}>
+            <div className={styles.percentageCircle} style={{ borderColor: percentageColor }}>
+              <span className={styles.percentage} style={{ color: percentageColor }}>{percentage}%</span>
+            </div>
+            <a href={generateGoogleSearchLink()} target="_blank" rel="noopener noreferrer" className={styles.name}>{props.title}</a>
+          </div>
           <p className={styles.description}>{props.overview && props.overview.length > 205 ? `${props.overview.slice(0, 250)}...` : props.overview}</p>
 
-          <p className={styles.releaseDate}>{props.releaseDate}</p>
+          <p className={styles.releaseDate}>Released {props.releaseDate}</p>
           <p className={styles.genres}>{mapGenreIdsToNames()}</p>
         </div>
         <div className={styles.iconContainer}>
-          <div className={styles.percentageCircle} style={{ borderColor: percentageColor }}>
-            <span style={{ color: percentageColor }}>{percentage}%</span>
-          </div>
-          <span>Vote count: ({props.voteCount})</span>
-          <span>My note: {personalStars} ({personalNote})</span>
-          <span>Watch count: <FontAwesomeIcon icon={faVideo} onClick={() => handleWatchMovie('add')} style={videoIconStyle} />
+
+          {/* <div style={{ textAlign: "center" }}>Vote count ({props.voteCount})</div> */}
+          <div style={{ textAlign: "center" }}>My note </div>
+          <div>{personalStars} ({personalNote})</div>
+          {/* <div>Watch count: <FontAwesomeIcon icon={faVideo} onClick={() => handleWatchMovie('add')} style={videoIconStyle} />
             ({watchCount})
             <FontAwesomeIcon icon={faCircleDown} onClick={() => handleWatchMovie('sub')} style={{ 'cursor': 'pointer', 'color': '780000' }} /> (-1)
-          </span>
-          <span>I love it:
-            <FontAwesomeIcon icon={faHeart} onClick={() => handleLikeMovie()} style={heartIconStyle} />
-          </span>
+          </div> */}
         </div>
       </div>
     </div>

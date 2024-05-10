@@ -22,18 +22,20 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  margin: 0.6rem 0.6rem 0 0;
+  margin: 0.6rem 0.6rem;
 }
 
 .name {
   font-weight: 500;
-  font-size: 1.1rem;
+  font-size: 1.3rem;
   color: rgb(11, 11, 152);
+  text-align: center;
 }
 
 .description {
   font-weight: 300;
   font-size: 0.9rem;
+  text-align: justify;
 }
 
 .iconContainer {
@@ -45,15 +47,34 @@
 .genres {
   font-style: italic;
 }
-
+.percentage {
+  font-size: 1.2rem;
+}
 .percentageCircle {
-  display: inline-block;
-  width: 2.7rem;
-  height: 2.7rem;
-  line-height: 2.5rem;
+  width: 3.6rem;
+  height: 3.6rem;
   text-align: center;
-  border: 0.125rem solid;
+  border: 0.2rem solid;
   border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+.topTitle {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0 0.5rem 0.5rem 0.5rem;
+}
+.heartIcon {
+  margin-left: auto;
+}
+
+.releaseDate {
+font-weight: 500;
+font-size: 1rem;
 }
 
 @media screen and (max-width: 460px) {

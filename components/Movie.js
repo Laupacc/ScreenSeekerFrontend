@@ -96,7 +96,6 @@ function Movie(props) {
     );
   }
 
-
   // Map genre IDs to names
   const mapGenreIdsToNames = () => {
     if (!props.genresData) {
@@ -129,7 +128,6 @@ function Movie(props) {
             <a href={generateGoogleSearchLink()} target="_blank" rel="noopener noreferrer" className={styles.name}>{props.title}</a>
           </div>
           <p className={styles.description}>{props.overview && props.overview.length > 205 ? `${props.overview.slice(0, 250)}...` : props.overview}</p>
-
           <p className={styles.releaseDate}>Released {props.releaseDate}</p>
           <p className={styles.genres}>{mapGenreIdsToNames()}</p>
         </div>

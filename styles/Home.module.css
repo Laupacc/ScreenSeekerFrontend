@@ -317,7 +317,7 @@
   background-color: lightgray;
   color: black;
 }
-.filterPopoverContent{
+.filterPopoverContent {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -331,6 +331,18 @@
   color: white;
   border: none;
   border-radius: 0.3rem;
+}
+.selectedFilter {
+  background-color: #780000;
+  color: white;
+  border: none;
+  border-radius: 0.3rem;
+}
+
+.miniIcon {
+  margin: 0 0 0 0.3rem;
+  width: 1.2rem;
+  height: auto;
 }
 
 @media screen and (max-width: 460px) {

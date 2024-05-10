@@ -79,12 +79,18 @@ function Movie(props) {
     return genreNames.join(', ');
   };
 
+  const generateGoogleSearchLink = () => {
+    return `https://www.google.com/search?q=${encodeURIComponent(props.title)}`;
+  };
+
   return (
     <div className={styles.card}>
-      <img className={styles.image} src={`https://image.tmdb.org/t/p/w500/${props.poster}`} alt={props.title} />
+      <a href={generateGoogleSearchLink()} target="_blank" rel="noopener noreferrer">
+        <img className={styles.image} src={`https://image.tmdb.org/t/p/w500/${props.poster}`} alt={props.title} />
+      </a>
       <div className={styles.textContainer}>
         <div>
-          <span className={styles.name}>{props.title}</span>
+          <a href={generateGoogleSearchLink()} target="_blank" rel="noopener noreferrer" className={styles.name}>{props.title}</a>
           <p className={styles.description}>{props.overview && props.overview.length > 205 ? `${props.overview.slice(0, 250)}...` : props.overview}</p>
 
           <p className={styles.releaseDate}>{props.releaseDate}</p>

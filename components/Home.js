@@ -27,11 +27,11 @@ function Home() {
   const [selectedCategory, setSelectedCategory] = useState("MOVIES");
   const [selectedTab, setSelectedTab] = useState("LASTRELEASES");
   const [selectedTabShow, setSelectedTabShow] = useState("LASTRELEASESSHOWS");
-  // const [likedMovies, setLikedMovies] = useState([]);
   const [selectedGenres, setSelectedGenres] = useState([]);
   const [moviesData, setMoviesData] = useState([]);
   const [tvData, setTvData] = useState([]);
-  const [genresData, setGenresData] = useState([]);
+  const [genresMovieData, setGenresMovieData] = useState([]);
+  const [genresTvData, setGenresTvData] = useState([]);
   const [topRatedMovies, setTopRatedMovies] = useState([]);
   const [topRatedTvShows, setTopRatedTvShows] = useState([]);
   const [open, setOpen] = useState(false);
@@ -66,17 +66,19 @@ function Home() {
     Promise.all([
       fetch('https://my-movies-backend-iota.vercel.app/movies'),
       fetch('https://my-movies-backend-iota.vercel.app/tv'),
-      fetch('https://my-movies-backend-iota.vercel.app/genres'),
+      fetch('https://my-movies-backend-iota.vercel.app/genresmovie'),
+      fetch('https://my-movies-backend-iota.vercel.app/genrestv'),
       fetch('https://my-movies-backend-iota.vercel.app/topratedmovies'),
       fetch('https://my-movies-backend-iota.vercel.app/topratedtv')
     ])
       .then(responses => Promise.all(responses.map(response => response.json())))
       .then(data => {
         console.log(data);
-        const [moviesData, tvData, genresData, topRatedMoviesData, topRatedTvData] = data;
+        const [moviesData, tvData, genresMovieData, genresTvData, topRatedMoviesData, topRatedTvData] = data;
         setMoviesData(moviesData.movies);
         setTvData(tvData.tv);
-        setGenresData(genresData.genres);
+        setGenresMovieData(genresMovieData.genres);
+        setGenresTvData(genresTvData.genres);
         setTopRatedMovies(topRatedMoviesData.topratedmovies);
         setTopRatedTvShows(topRatedTvData.topratedtv);
       })
@@ -84,16 +86,6 @@ function Home() {
         console.error('Error fetching data:', error);
       });
   }, []);
-
-
-  // Liked movies (inverse data flow)
-  // const updateLikedMovies = (movieTitle) => {
-  //   if (likedMovies.find(movie => movie === movieTitle)) {
-  //     setLikedMovies(likedMovies.filter(movie => movie !== movieTitle));
-  //   } else {
-  //     setLikedMovies([...likedMovies, movieTitle]);
-  //   }
-  // };
 
   const updateLikedMovies = (movieTitle) => {
     if (liked.find(movie => movie.title === movieTitle)) {
@@ -103,16 +95,6 @@ function Home() {
     }
   };
 
-
-  // Liked movies popover content
-  // const likedMoviesPopover = liked.map((data, i) => {
-  //   return (
-  //     <div key={i} className={styles.likedMoviesContainer}>
-  //       <span className="likedMovie">{data}</span>
-  //       <FontAwesomeIcon icon={faCircleXmark} onClick={() => updateLikedMovies(data)} className={styles.crossIcon} />
-  //     </div>
-  //   );
-  // });
 
   const likedMoviesPopover = liked.map((movie, i) => (
     <div key={i} className={styles.likedMoviesContainer}>
@@ -159,7 +141,7 @@ function Home() {
         voteCount={data && data.vote_count}
         genre_ids={data && data.genre_ids}
         releaseDate={data && data.release_date}
-        genresData={genresData}
+        genresData={selectedCategory === "MOVIES" ? genresMovieData : genresTvData}
         likedMovies={liked}
         updateLikedMovies={updateLikedMovies}
       />
@@ -179,15 +161,6 @@ function Home() {
   const filteredTopRatedTvShows = filterItemsByGenres(topRatedTvShows, selectedGenres);
   const topRatedTv = mapFilteredItemsToComponents(filteredTopRatedTvShows, Movie);
 
-  // Genres map
-  // const genrePopover = genresData.map((data, i) => {
-  //   const isSelected = selectedGenres.includes(data.id);
-  //   return (
-  //       <div key={i} className={`${styles.genreContent} ${isSelected ? styles.selectedGenre : ''}`} onClick={() => toggleGenre(data.id)}>
-  //         {data.name}
-  //       </div>
-  //   );
-  // });
 
   const genrePopover = (
     <div className={styles.genresPopoverContent}>
@@ -196,7 +169,19 @@ function Home() {
           Clear All Genres
         </button>
       )}
-      {genresData.map((data, i) => {
+      {selectedCategory === "MOVIES" && genresMovieData.map((data, i) => {
+        const isSelected = selectedGenres.includes(data.id);
+        return (
+          <div
+            key={i}
+            className={`${styles.genreContent} ${isSelected ? styles.selectedGenre : ''}`}
+            onClick={() => toggleGenre(data.id)}
+          >
+            {data.name}
+          </div>
+        );
+      })}
+      {selectedCategory === "TV" && genresTvData.map((data, i) => {
         const isSelected = selectedGenres.includes(data.id);
         return (
           <div
@@ -210,6 +195,7 @@ function Home() {
       })}
     </div>
   );
+
 
   // Genres button content
   const selectedGenresCount = selectedGenres.length;

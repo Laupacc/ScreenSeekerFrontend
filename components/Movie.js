@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHeart, faStar, faVideo, faCircleDown } from '@fortawesome/free-solid-svg-icons';
+import { faHeart, faStar, faVideo, faCircleDown, faPercentage } from '@fortawesome/free-solid-svg-icons';
 import styles from '../styles/Movie.module.css';
 
 function Movie(props) {
@@ -8,14 +8,32 @@ function Movie(props) {
   const [personalNote, setPersonalNote] = useState(0);
 
   // Average evaluation
-  const stars = [];
-  for (let i = 0; i < 10; i++) {
-    let style = {};
-    if (i < props.voteAverage - 1) {
-      style = { 'color': '#f1c40f' };
-    }
-    stars.push(<FontAwesomeIcon key={i} icon={faStar} style={style} />);
-  }
+  // const stars = [];
+  // for (let i = 0; i < 10; i++) {
+  //   let style = {};
+  //   if (i < props.voteAverage - 1) {
+  //     style = { 'color': '#f1c40f' };
+  //   }
+  //   stars.push(<FontAwesomeIcon key={i} icon={faStar} style={style} />);
+  // }
+
+  const percentage = Math.round((props.voteAverage / 10) * 100);
+  let percentageColor = '';
+  if (percentage >= 90) {
+    percentageColor = '#7FFF00'; // bright green
+  } else if (percentage >= 80) {
+    percentageColor = '#2ecc71'; // green
+  } else if (percentage >= 70) {
+    percentageColor = '#00bdeb'; // blue
+  } else if (percentage >= 60) {
+    percentageColor = '#2980b9'; // dark blue
+  } else if (percentage >= 50) {
+    percentageColor = '#f39c12'; // orange
+  } else if (percentage >= 40) {
+    percentageColor = '#f1c40f'; // yellow
+  } else {
+    percentageColor = '#e74c3c'; // red
+  };
 
   // Watch movie
   const handleWatchMovie = (action) => {
@@ -97,7 +115,10 @@ function Movie(props) {
           <p className={styles.genres}>{mapGenreIdsToNames()}</p>
         </div>
         <div className={styles.iconContainer}>
-          <span className={styles.vote}>Ratings: {stars}({props.voteCount})</span>
+          <div className={styles.percentageCircle} style={{ borderColor: percentageColor }}>
+            <span style={{ color: percentageColor }}>{percentage}%</span>
+          </div>
+          <span>Vote count: ({props.voteCount})</span>
           <span>My note: {personalStars} ({personalNote})</span>
           <span>Watch count: <FontAwesomeIcon icon={faVideo} onClick={() => handleWatchMovie('add')} style={videoIconStyle} />
             ({watchCount})

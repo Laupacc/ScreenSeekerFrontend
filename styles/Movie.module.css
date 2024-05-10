@@ -46,6 +46,16 @@
   font-style: italic;
 }
 
+.percentageCircle {
+  display: inline-block;
+  width: 2.7rem;
+  height: 2.7rem;
+  line-height: 2.5rem;
+  text-align: center;
+  border: 0.125rem solid;
+  border-radius: 50%;
+}
+
 @media screen and (max-width: 460px) {
   .card {
     width: 8.5rem;

@@ -191,7 +191,7 @@ function Home() {
   const likedMoviesPopover = liked.map((movie, i) => (
     <div key={i} className={styles.likedMoviesContainer}>
       <span>{movie.title}</span>
-      <faCircleXmark onClick={() => updateLikedMovies(movie.title)} className={styles.crossIcon} />
+      <faCircleXmark onClick={() => updateLikedMovies(movie.title)} />
     </div>
   ));
 

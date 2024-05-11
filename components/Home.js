@@ -12,13 +12,12 @@ import Modal from '@mui/material/Modal';
 import Swal from 'sweetalert2'
 import { ColorRing } from 'react-loader-spinner'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCircleXmark } from '@fortawesome/free-solid-svg-icons';
 import { CgCloseR } from "react-icons/cg";
 import { PiArrowFatLinesUpDuotone } from "react-icons/pi";
 import { TbArrowBigUpLinesFilled } from "react-icons/tb";
 import { IoFilter } from "react-icons/io5";
 import { BiCategoryAlt } from "react-icons/bi";
-import { FaCircleXmark } from "react-icons/fa6";
-
 
 
 function Home() {
@@ -191,7 +190,7 @@ function Home() {
   const likedMoviesPopover = liked.map((movie, i) => (
     <div key={i} className={styles.likedMoviesContainer}>
       <span>{movie.title}</span>
-      <faCircleXmark onClick={() => updateLikedMovies(movie.title)} />
+      <FontAwesomeIcon icon={faCircleXmark} onClick={() => updateLikedMovies(movie.title)} className={styles.crossIcon} />
     </div>
   ));
 

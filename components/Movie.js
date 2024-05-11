@@ -4,6 +4,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHeart, faStar, faVideo, faCircleDown, faPercentage } from '@fortawesome/free-solid-svg-icons';
 import styles from '../styles/Movie.module.css';
 import { FaHeartCirclePlus, FaHeartCircleMinus, FaHeartCircleExclamation } from "react-icons/fa6";
+import { useEffect } from 'react';
+
 
 function Movie(props) {
 
@@ -62,11 +64,11 @@ function Movie(props) {
   let heartIconStyle = { 'cursor': 'pointer' };
   let heartIcon = <FaHeartCirclePlus style={heartIconStyle} size={26} />;
   if (user.token && props.likedMovies.includes(props.title)) {
-    heartIconStyle = { 'color': 'rgb(206, 7, 7)' };
+    heartIconStyle = { 'color': 'red' };
     heartIcon = <FaHeartCircleMinus style={heartIconStyle} size={26} />;
   } else if (!user.token) {
     heartIcon = <FaHeartCircleExclamation size={26} />;
-  }
+  };
 
   // Personal note
   const personalStars = [];
@@ -89,6 +91,7 @@ function Movie(props) {
           }
         }}
         style={starStyle}
+        className={styles.starIcon}
       />
     );
   }
@@ -118,8 +121,11 @@ function Movie(props) {
         <div className={styles.heartIcon} onClick={handleLikeMovie}>{heartIcon}</div>
         <div>
           <div className={styles.topTitle}>
-            <div className={styles.percentageCircle} style={{ borderColor: percentageColor }}>
-              <span className={styles.percentage} style={{ color: percentageColor }}>{percentage}%</span>
+            <div className={styles.vote}>
+              <div className={styles.percentageCircle} style={{ borderColor: percentageColor }}>
+                <span className={styles.percentage} style={{ color: percentageColor }}>{percentage}%</span>
+              </div>
+              <div className={styles.voteCount} style={{ color: percentageColor }}>/ {props.voteCount} votes</div>
             </div>
             <a href={generateGoogleSearchLink()} target="_blank" rel="noopener noreferrer" className={styles.name}>{props.title}</a>
           </div>
@@ -134,7 +140,7 @@ function Movie(props) {
             ({watchCount})
             <FontAwesomeIcon icon={faCircleDown} onClick={() => handleWatchMovie('sub')} style={{ 'cursor': 'pointer', 'color': '780000' }} /> (-1)
           </div> */}
-          {/* <div style={{ textAlign: "center" }}>Vote count ({props.voteCount})</div> */}
+
         </div>
       </div>
     </div>

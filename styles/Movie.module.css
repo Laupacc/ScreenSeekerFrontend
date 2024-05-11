@@ -81,6 +81,15 @@
   align-items: center;
   font-size: 0.9rem;
 }
+.vote {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.voteCount {
+  font-size: 1rem;
+  margin-left: 1rem;
+}
 
 @media screen and (max-width: 460px) {
   .card {

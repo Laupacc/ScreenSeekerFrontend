@@ -17,6 +17,7 @@ import { PiArrowFatLinesUpDuotone } from "react-icons/pi";
 import { TbArrowBigUpLinesFilled } from "react-icons/tb";
 import { IoFilter } from "react-icons/io5";
 import { BiCategoryAlt } from "react-icons/bi";
+import Head from 'next/head';
 
 
 function Home() {
@@ -218,7 +219,6 @@ function Home() {
     );
   };
 
-
   // Genres popover content
   const genrePopover = (
     <div className={styles.selectedGenreContainer} >
@@ -257,13 +257,6 @@ function Home() {
   // Genres button content
   const selectedGenresCount = selectedGenres.length;
   const genresButtonContent = selectedGenresCount > 0 ? `Genres (${selectedGenresCount})` : 'Genres';
-
-  const scrollToTop = () => {
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth"
-    });
-  };
 
 
   // Function to apply filter based on criteria and sortOrder
@@ -359,12 +352,22 @@ function Home() {
   const filteredTopRatedTvShows = filterItemsByGenres(topRatedTvShows, selectedGenres);
   const topRatedTv = mapFilteredItemsToComponents(filteredTopRatedTvShows, Movie);
 
+  // Scroll to top of screen function
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth"
+    });
+  };
 
 
   return (
     <>
+      <Head>
+        <title>ScreenSeeker</title>
+      </Head>
       <div className={styles.main}>
-        <div className={styles.loginHeader}>
+        <header className={styles.loginHeader}>
           {!user.token ? (
             <button className={styles.login} onClick={handleOpen}>Login</button>
           ) : (
@@ -404,7 +407,7 @@ function Home() {
               </div>
             </Box>
           </Modal>
-        </div>
+        </header>
 
         {user.token ? (
           <div className={styles.popoverHeader}>

@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHeart, faStar, faVideo, faCircleDown, faPercentage } from '@fortawesome/free-solid-svg-icons';
+import { FaStar } from "react-icons/fa";
 import styles from '../styles/Movie.module.css';
 import { FaHeartCirclePlus, FaHeartCircleMinus, FaHeartCircleExclamation } from "react-icons/fa6";
 import { useEffect } from 'react';
@@ -78,9 +79,9 @@ function Movie(props) {
       starStyle = { 'color': '#2196f3', 'cursor': 'pointer' };
     }
     personalStars.push(
-      <FontAwesomeIcon
+      <FaStar
         key={i}
-        icon={faStar}
+
         onClick={() => {
           if (i + 1 === personalNote) {
             // Deselect the star if it's already selected

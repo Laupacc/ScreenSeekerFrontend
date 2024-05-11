@@ -1,10 +1,14 @@
 import { useState } from 'react';
+import { useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHeart, faStar, faVideo, faCircleDown, faPercentage } from '@fortawesome/free-solid-svg-icons';
 import styles from '../styles/Movie.module.css';
-import { FaHeartCirclePlus, FaHeartCircleMinus } from "react-icons/fa6";
+import { FaHeartCirclePlus, FaHeartCircleMinus, FaHeartCircleExclamation } from "react-icons/fa6";
 
 function Movie(props) {
+
+  const user = useSelector((state) => state.user.value);
+
   const [watchCount, setWatchCount] = useState(0);
   const [personalNote, setPersonalNote] = useState(0);
 
@@ -52,30 +56,24 @@ function Movie(props) {
   }
 
   // Like movie
-  // const handleLikeMovie = () => {
-  //   props.updateLikedMovies(props.title);
-  // };
-  // let heartIconStyle = { 'cursor': 'pointer' };
-  // if (props.likedMovies.includes(props.title)) {
-  //   heartIconStyle = { 'color': '#e74c3c', 'cursor': 'pointer' };
-  // }
-
   const handleLikeMovie = () => {
     props.updateLikedMovies(props.title);
   };
   let heartIconStyle = { 'cursor': 'pointer' };
   let heartIcon = <FaHeartCirclePlus style={heartIconStyle} size={26} />;
-  if (props.likedMovies.includes(props.title)) {
+  if (user.token && props.likedMovies.includes(props.title)) {
     heartIconStyle = { 'color': 'rgb(206, 7, 7)' };
     heartIcon = <FaHeartCircleMinus style={heartIconStyle} size={26} />;
+  } else if (!user.token) {
+    heartIcon = <FaHeartCircleExclamation size={26} />;
   }
 
   // Personal note
   const personalStars = [];
   for (let i = 0; i < 10; i++) {
-    let style = { 'cursor': 'pointer' };
+    let starStyle = { 'cursor': 'pointer' };
     if (i < personalNote) {
-      style = { 'color': '#2196f3', 'cursor': 'pointer' };
+      starStyle = { 'color': '#2196f3', 'cursor': 'pointer' };
     }
     personalStars.push(
       <FontAwesomeIcon
@@ -90,8 +88,7 @@ function Movie(props) {
             setPersonalNote(i + 1);
           }
         }}
-        style={style}
-        className="note"
+        style={starStyle}
       />
     );
   }
@@ -107,6 +104,7 @@ function Movie(props) {
     return genreNames.join(', ');
   };
 
+  // Generate Google search link
   const generateGoogleSearchLink = () => {
     return `https://www.google.com/search?q=${encodeURIComponent(props.title)}`;
   };
@@ -117,9 +115,7 @@ function Movie(props) {
         <img className={styles.image} src={`https://image.tmdb.org/t/p/w500/${props.poster}`} alt={props.title} />
       </a>
       <div className={styles.textContainer}>
-        <div className={styles.heartIcon} >
-          <div className={styles.heartIcon} onClick={handleLikeMovie}>{heartIcon}</div>
-        </div>
+        <div className={styles.heartIcon} onClick={handleLikeMovie}>{heartIcon}</div>
         <div>
           <div className={styles.topTitle}>
             <div className={styles.percentageCircle} style={{ borderColor: percentageColor }}>
@@ -132,14 +128,13 @@ function Movie(props) {
           <p className={styles.genres}>{mapGenreIdsToNames()}</p>
         </div>
         <div className={styles.iconContainer}>
-
-          {/* <div style={{ textAlign: "center" }}>Vote count ({props.voteCount})</div> */}
           <div style={{ textAlign: "center" }}>My note </div>
-          <div>{personalStars} ({personalNote})</div>
+          <div className={styles.note}>{personalStars} ({personalNote})</div>
           {/* <div>Watch count: <FontAwesomeIcon icon={faVideo} onClick={() => handleWatchMovie('add')} style={videoIconStyle} />
             ({watchCount})
             <FontAwesomeIcon icon={faCircleDown} onClick={() => handleWatchMovie('sub')} style={{ 'cursor': 'pointer', 'color': '780000' }} /> (-1)
           </div> */}
+          {/* <div style={{ textAlign: "center" }}>Vote count ({props.voteCount})</div> */}
         </div>
       </div>
     </div>

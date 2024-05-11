@@ -19,7 +19,6 @@ import { IoFilter } from "react-icons/io5";
 import { BiCategoryAlt } from "react-icons/bi";
 
 
-
 function Home() {
   // Redux
   const dispatch = useDispatch();
@@ -222,7 +221,7 @@ function Home() {
 
   // Genres popover content
   const genrePopover = (
-    <div >
+    <div className={styles.selectedGenreContainer} >
       {selectedGenres && (
         <button className={styles.clearGenresButton} onClick={() => setSelectedGenres([])}>
           Clear All Genres
@@ -306,7 +305,7 @@ function Home() {
 
   // Filter popover content
   const filterPopover = (
-    <div>
+    <div className={styles.selectedFilterContainer}>
       <button className={styles.clearGenresButton} onClick={clearFilters}>Reset Filter</button>
       {selectedCategory !== "TV" && (
         <>

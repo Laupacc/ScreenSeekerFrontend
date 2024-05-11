@@ -157,6 +157,12 @@
   top: 2%; */
 }
 
+.selectedGenreContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
 .genreContent {
   display: flex;
   justify-content: center;
@@ -319,24 +325,37 @@
 }
 .filterPopoverContent {
   display: flex;
-  flex-direction: column;
   justify-content: center;
   align-items: center;
-  font-size: 1.2rem;
-  margin: 0.5rem 0.5rem 0.5rem 0.5rem;
+  font-size: 1rem;
+  margin: 0.5rem 0.6rem;
   cursor: pointer;
+  padding: 0.2rem;
 }
 .filterPopoverContent:hover {
   background-color: #f2a643;
   color: white;
   border: none;
   border-radius: 0.3rem;
+  margin: 0.5rem 0.5rem 0.5rem 0.5rem;
 }
 .selectedFilter {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0.5rem 0.5rem 0.5rem 0.5rem;
+  font-size: 1rem;
   background-color: #780000;
   color: white;
   border: none;
   border-radius: 0.3rem;
+  padding: 0.2rem;
+}
+.selectedFilterContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 .miniIcon {

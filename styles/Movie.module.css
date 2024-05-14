@@ -103,14 +103,44 @@
 
   .name {
     font-size: 0.9rem;
+    margin: 0.3rem 0.3rem;
   }
-
   .description {
-    font-size: 0.6rem;
+    font-size: 0.7rem;
+    margin: 0.3rem 0.3rem;
   }
-
   .iconContainer {
     font-size: 0.6rem;
+  }
+  .textContainer {
+    margin: 0.3rem 0.3rem;
+  }
+  .percentage {
+    font-size: 0.8rem;
+  }
+  .percentageCircle {
+    width: 3.5rem;
+    height: 2.6rem;
+    margin-bottom: 0.5rem;
+    margin-left: 0.5rem;
+  }
+  .topTitle {
+    margin: 0 0.3rem 0.3rem 0.3rem;
+  }
+  .releaseDate {
+    font-size: 0.8rem;
+    margin: 0.3rem 0.3rem;
+  }
+  .note {
+    font-size: 0.7rem;
+  }
+  .voteCount {
+    font-size: 0.9rem;
+    /* margin-left: 1rem; */
+  }
+  .genres {
+    font-size: 0.8rem;
+    margin: 0.3rem 0.3rem;
   }
 }
 
@@ -135,6 +165,34 @@
   .iconContainer {
     font-size: 0.6rem;
   }
+  .textContainer {
+    margin: 0.3rem 0.3rem;
+  }
+  .percentage {
+    font-size: 0.8rem;
+  }
+  .percentageCircle {
+    width: 3.8rem;
+    height: 2.6rem;
+    margin-bottom: 0.5rem;
+    margin-left: 0.5rem;
+  }
+  .topTitle {
+    margin: 0 0.3rem 0.3rem 0.3rem;
+  }
+  .releaseDate {
+    font-size: 0.8rem;
+  }
+  .note {
+    font-size: 0.7rem;
+  }
+  .vote {
+    font-size: 0.8rem;
+  }
+  .voteCount {
+    font-size: 0.9rem;
+    margin-left: 0.8rem;
+  }
 }
 
 @media screen and (min-width: 768px) and (max-width: 1024px) {
@@ -157,6 +215,34 @@
 
   .iconContainer {
     font-size: 0.75rem;
+  }
+  .textContainer {
+    margin: 0.5rem 0.5rem;
+  }
+  .percentage {
+    font-size: 1rem;
+  }
+  .percentageCircle {
+    width: 4.2rem;
+    height: 3.2rem;
+    margin-bottom: 0.6rem;
+    margin-left: 0.5rem;
+  }
+  .topTitle {
+    margin: 0 0.5rem 0.5rem 0.5rem;
+  }
+  .releaseDate {
+    font-size: 0.9rem;
+  }
+  .note {
+    font-size: 0.8rem;
+  }
+  .vote {
+    font-size: 0.9rem;
+  }
+  .voteCount {
+    font-size: 1rem;
+    margin-left: 1rem;
   }
 }
 @media screen and (min-width: 1408px) {

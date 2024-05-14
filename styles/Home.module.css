@@ -414,17 +414,17 @@
     margin: 0 0.3rem 0 0.3rem;
   }
   .genreContent {
-    width: 5.3rem;
+    width: fit-content;
     height: 2rem;
     margin: 0.3rem 0.3rem 0.3rem 0.3rem;
     font-size: 0.7rem;
   }
   .genreContent:hover {
-    width: 5.3rem;
+    width: fit-content;
     height: 2rem;
   }
   .selectedGenre {
-    width: 5.3rem;
+    width: fit-content;
     height: 2rem;
   }
   .closeBtn {
@@ -465,10 +465,37 @@
   }
   .backToTopBtn {
     bottom: 0.5rem;
-    right: 0;
+    right: 0.1rem;
     width: 2rem;
     height: 2rem;
   }
+  .filterPopoverContent {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 0.8rem;
+    margin: 0.5rem 0.6rem;
+    cursor: pointer;
+    width: fit-content;
+  }
+  .filterPopoverContent:hover {
+    background-color: #f2a643;
+    color: white;
+    border: none;
+    border-radius: 0.3rem;
+    margin: 0.5rem 0.6rem;
+    width: fit-content;
+  }
+  .selectedFilter {
+    margin: 0.5rem 0.6rem;
+    font-size: 0.9rem;
+    width: fit-content;
+    background-color: #780000;
+    color: white;
+    border: none;
+    border-radius: 0.3rem;
+  }
+
 }
 
 @media screen and (min-width: 460px) and (max-width: 768px) {
@@ -508,17 +535,17 @@
     margin: 0 0.3rem 0 0.3rem;
   }
   .genreContent {
-    width: 5.3rem;
+    width: fit-content;
     height: 2rem;
     margin: 0.3rem 0.3rem 0.3rem 0.3rem;
     font-size: 0.7rem;
   }
   .genreContent:hover {
-    width: 5.3rem;
+    width: fit-content;
     height: 2rem;
   }
   .selectedGenre {
-    width: 5.3rem;
+    width: fit-content;
     height: 2rem;
   }
   .closeBtn {
@@ -555,6 +582,32 @@
     right: 0;
     width: 2rem;
     height: 2rem;
+  }
+  .filterPopoverContent {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 0.8rem;
+    margin: 0.5rem 0.6rem;
+    cursor: pointer;
+    width: fit-content;
+  }
+  .filterPopoverContent:hover {
+    background-color: #f2a643;
+    color: white;
+    border: none;
+    border-radius: 0.3rem;
+    margin: 0.5rem 0.6rem;
+    width: fit-content;
+  }
+  .selectedFilter {
+    margin: 0.5rem 0.6rem;
+    font-size: 0.9rem;
+    width: fit-content;
+    background-color: #780000;
+    color: white;
+    border: none;
+    border-radius: 0.3rem;
   }
 }
 @media screen and (min-width: 570px) and (max-width: 1210px) {

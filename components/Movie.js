@@ -25,6 +25,7 @@ function Movie(props) {
   //   stars.push(<FontAwesomeIcon key={i} icon={faStar} style={style} />);
   // }
 
+  // Percentage circle for vote average
   const percentage = Math.round((props.voteAverage / 10) * 100);
   let percentageColor = '';
   if (percentage >= 90) {
@@ -47,7 +48,7 @@ function Movie(props) {
   const handleWatchMovie = (action) => {
     if (action === 'add') {
       setWatchCount(watchCount + 1);
-    } else if (action === 'sub') { // Add functionality to subtract one from watch count
+    } else if (action === 'sub') {
       if (watchCount > 0) {
         setWatchCount(watchCount - 1);
       }
@@ -130,9 +131,11 @@ function Movie(props) {
             </div>
             <a href={generateGoogleSearchLink()} target="_blank" rel="noopener noreferrer" className={styles.name}>{props.title}</a>
           </div>
+
           <p className={styles.description}>{props.overview && props.overview.length > 205 ? `${props.overview.slice(0, 250)}...` : props.overview}</p>
           <p className={styles.releaseDate}>Released {props.releaseDate}</p>
           <p className={styles.genres}>{mapGenreIdsToNames()}</p>
+
         </div>
         <div className={styles.iconContainer}>
           <div style={{ textAlign: "center" }}>My note </div>
